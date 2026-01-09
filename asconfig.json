@@ -25,6 +25,7 @@
     "sharedMemory": true,
     "maximumMemory": 32768,
     "exportTable": true,
-    "enable": ["threads", "simd", "relaxed-simd"]
+    "enable": ["threads", "simd", "relaxed-simd"],
+    "transform": "./transform.js"
   }
 }

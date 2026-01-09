@@ -6,8 +6,8 @@ class MyPlugin extends Clap.Plugin {
 		super(host);
 	}
 
-	pluginProcess(processObj : Clap.Process) : i32 {
-		// console.log("process");
+	pluginProcess(process : Clap.Process) : i32 {
+		console.log(`process.audioInputsCount = ${process.audioInputsCount}`);
 		return Clap.PROCESS_CONTINUE;
 	}
 }
