@@ -1,4 +1,4 @@
-import {fnPtr, modulePath} from "./common.ts"
+import {fnPtr, modulePath, CString, getCString, setCString, CStringNullable, getCStringNullable, setCStringNullable, Renamed, getRenamed, setRenamed, NullablePtr, getNullablePtr, setNullablePtr, CNumArray, getCNumArray, CObjArray, getCObjArray, CPtrArray, getCPtrArray} from "./common.ts"
 
 export const MAX_CSTRING_LENGTH = 8192;
 export const MAX_FEATURE_COUNT = 100;
@@ -8,75 +8,6 @@ export const PROCESS_CONTINUE = 1;
 export const PROCESS_CONTINUE_IF_NOT_QUIET = 2;
 export const PROCESS_TAIL = 3;
 export const PROCESS_SLEEP = 4;
-
-// @property methods to translate a `string` into C-style UTF8 `char *`
-type CString = string;
-@inline function getCString(ptr: usize): string {
-	return String.UTF8.decodeUnsafe(host.name, MAX_CSTRING_LENGTH, true);
-}
-@inline function setCString(str: string, ptr: usize): usize {
-	if (ptr != 0) heap.free(ptr); // free previous string
-	let bytes = String.UTF8.byteLength(str, true);
-	ptr = heap.alloc(bytes);
-	String.UTF8.encodeUnsafe(changetype<usize>(str), str.length, ptr, true);
-	return ptr;
-}
-type CStringNullable = string | null;
-@inline function getCStringNullable(ptr: usize): string | null {
-	if (ptr == 0) return null;
-	return String.UTF8.decodeUnsafe(host.name, MAX_CSTRING_LENGTH, true);
-}
-@inline function setCStringNullable(str: string | null, ptr: usize): usize {
-	if (ptr != 0) heap.free(ptr); // free previous string
-	if (str == null) return 0;
-	return setCString(str as string, ptr);
-}
-
-type Renamed<T> = T;
-@inline function getRenamed<T>(v: T): T {
-	return v;
-}
-@inline function setRenamed<T>(v: T, prev: T): T {
-	return v;
-}
-
-type NullablePtr<Obj> = Obj | null;
-@inline function getNullablePtr<Obj>(ptr: usize): Obj | null {
-	if (ptr == 0) return null;
-	return changetype<Obj>(ptr);
-}
-@inline function setNullablePtr<Obj>(v: Obj | null, prev: usize): usize {
-	if (v == null) return 0;
-	return changetype<usize>(v);
-}
-
-@unmanaged @final
-export class CNumArray<T> {
-	@inline get(i: usize) : T {
-		return load<T>(changetype<usize>(this) + sizeof<T>()*i);
-	}
-	@inline @operator("[]") _get(i: usize) : T {
-		return load<T>(changetype<usize>(this) + sizeof<T>()*i);
-	}
-	@inline set(i: usize, v: T) : T {
-		return store<T>(changetype<usize>(this) + sizeof<T>()*i, T);
-	}
-}
-@inline function getCNumArray<T>(ptr : usize) : CNumArray<T> {
-	return changetype<CNumArray<T>>(ptr);
-}
-@unmanaged @final
-export class CObjArray<T> {
-	@inline get(i: usize) : T {
-		return changetype<T>(changetype<usize>(this) + offsetof<T>()*i);
-	}
-	@inline @operator("[]") _get(i: usize) : T {
-		return changetype<T>(changetype<usize>(this) + offsetof<T>()*i);
-	}
-}
-@inline function getCObjArray<T>(ptr : usize) : CObjArray<T> {
-	return changetype<CObjArray<T>>(ptr);
-}
 
 @unmanaged
 export class clap_version {
@@ -156,10 +87,10 @@ export class clap_audio_buffer {
 	_latency : u32;
 	_constant_mask : u64;
 }
-@unmanaged
-export class AudioBuffer {
-	@property readonly data32 : CObjArray<CNumArray<f32>> = this._data32;
-	@property readonly data64 : CObjArray<CNumArray<f64>> = this._data64;
+@unmanaged @final
+export class AudioBuffer extends clap_audio_buffer {
+	@property readonly data32 : CPtrArray<CNumArray<f32>> = this._data32;
+	@property readonly data64 : CPtrArray<CNumArray<f64>> = this._data64;
 	@property readonly channelCount : Renamed<u32> = this._channel_count;
 	@property latency : Renamed<u32> = this._latency;
 	@property constantMask : Renamed<u32> = this._constant_mask;
@@ -212,9 +143,50 @@ export class Host extends clap_host {
 	@property readonly version: CStringNullable = this._version;
 }
 
-// Unlike all other classes, plugins aren't final - they get extended.
+// Unlike everything else, plugins (and their extensions) aren't final - they get extended.
 // This means they can't be `@unmanaged`, because they have things to destroy.
-// We therefore also need a way to retain these managed plugins, while we return them as raw pointers
+const AUDIO_PORT_IS_MAIN = 1 << 0;
+const AUDIO_PORT_SUPPORTS_64BITS = 1 << 1;
+const AUDIO_PORT_PREFERS_64BITS = 1 << 2;
+const AUDIO_PORT_REQUIRES_COMMON_SAMPLE_SIZE = 1 << 3;
+
+const INVALID_ID = 0xFFFFFFFF;
+
+export type clap_id = u32;
+
+@unmanaged
+export class clap_audio_port_info {
+	_id: clap_id = 0;
+	@array(256) _name: u8 = 0;
+	_flags: u32 = 0;
+	_channel_count: u32 = 0;
+	_port_type: usize = 0;
+	_in_place_pair: clap_id = INVALID_ID
+}
+@unmanaged @final
+export class AudioPortInfo extends clap_audio_port_info {
+	@property id : Renamed<clap_id> = this._id;
+	// Fixed-size string
+	@inline get name() : string {
+		return String.UTF8.decodeUnsafe(this._name, 256, true);
+	}
+	@inline set name(str : string) {
+		let bytes = String.UTF8.byteLength(str, true);
+		while (bytes > 256) str = str.substring(0, str.length - 1); // keep trimming until it fits
+		String.UTF8.encodeUnsafe(changetype<usize>(str), str.length, this._name, true);
+	}
+	@property flags : Renamed<u32> = this._flags;
+	@property channelCount : Renamed<u32> = this._channel_count;
+	@property portType : CString = this._port_type;
+	@property inPlacePair : Renamed<clap_id> = this._in_place_pair;
+}
+
+export class clap_plugin_audio_ports {
+	count : usize;
+	get : usize;
+}
+
+// Because plugins are managed, we need a way to retain them while we return raw pointers
 let activePlugins = new Map<usize, Plugin>();
 class clap_plugin {
 	_desc: usize;
@@ -232,6 +204,8 @@ class clap_plugin {
 }
 export class Plugin extends clap_plugin {
 	readonly host: Host;
+
+	private pluginAudioPorts : clap_plugin_audio_ports = new clap_plugin_audio_ports();
 
 	constructor(host: Host) {
 		super();
@@ -253,6 +227,9 @@ export class Plugin extends clap_plugin {
 			return plugin.pluginGetExtension(extId);
 		});
 		this._on_main_thread = fnPtr((plugin: Plugin): void => plugin.pluginOnMainThread());
+
+		this.pluginAudioPorts.count = fnPtr((plugin: Plugin, isInput: bool) : u32 => plugin.audioPortsCount(isInput));
+		this.pluginAudioPorts.get = fnPtr((plugin: Plugin, index: u32, isInput: bool, info: AudioPortInfo) : bool => plugin.audioPortsGet(index, isInput, info));
 	}
 
 	pluginInit(): bool {
@@ -273,9 +250,19 @@ export class Plugin extends clap_plugin {
 		return 0;
 	}
 	pluginGetExtension(extId: string): usize {
+		if (extId == "clap.audio-ports") {
+			return changetype<usize>(this.pluginAudioPorts);
+		}
 		return 0;
 	}
 	pluginOnMainThread(): void {}
+
+	audioPortsCount(isInput: bool) : u32 {
+		return 0;
+	}
+	audioPortsGet(index: u32, isInput: bool, info: AudioPortInfo) : bool {
+		return false;
+	}
 }
 
 class RegisteredClapPlugin {

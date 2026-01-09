@@ -1,4 +1,4 @@
-import {fnPtr, objPtr, gc, gcThen, modulePath} from "./common.ts"
+import {fnPtr, modulePath} from "./common.ts"
 import {clapPluginFactory} from "./clap-plugins.ts"
 
 //---- CLAP entry ----//
@@ -11,22 +11,21 @@ function clapEntry_init(strPtr : usize) : bool {
 
 	modulePath = String.UTF8.decodeUnsafe(strPtr, 8192, true);
 	console.log(`clap_entry.init(${modulePath})`);
-	return gcThen(true);
+	return true;
 }
 function clapEntry_deinit() : void {
 	let count = atomic.sub<i32>(initCounter, 1);
 	if (count != 0) return;
 
 	console.log(`clap_entry.deinit()`);
-	gc();
 }
 function clapEntry_get_factory(strPtr : usize) : usize {
 	let factoryId = String.UTF8.decodeUnsafe(strPtr, 8192, true);
 	if (factoryId == "clap.plugin-factory") {
-		return gcThen(clapPluginFactory);
+		return clapPluginFactory;
 	}
 	console.log(`clap_entry.get_factory(${factoryId})`);
-	return gcThen(0);
+	return 0;
 }
 
 class clap_plugin_entry {
@@ -38,7 +37,7 @@ class clap_plugin_entry {
 	deinit : usize = fnPtr(clapEntry_deinit);
 	get_factory: usize = fnPtr(clapEntry_get_factory);
 }
-const clap_entry = objPtr(new clap_plugin_entry());
+const clap_entry = changetype<usize>(new clap_plugin_entry());
 export {clap_entry};
 
 export function malloc(size : usize) : usize {
