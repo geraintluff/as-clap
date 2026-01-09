@@ -1,10 +1,14 @@
-import {fnPtr, modulePath, CString, getCString, setCString, CStringNullable, getCStringNullable, setCStringNullable, Renamed, getRenamed, setRenamed, NullablePtr, getNullablePtr, setNullablePtr, CNumArray, getCNumArray, CObjArray, getCObjArray} from "./common.ts"
+import {fnPtr, modulePath} from "./common.ts"
 import * as Clap from "./clap-plugins.ts"
 
 class MyPlugin extends Clap.Plugin {
 
 	constructor(host : Clap.Host) {
 		super(host);
+	}
+
+	pluginInit() : bool {
+		console.log(`Plugin initialised!  Module path is ${modulePath}`);
 	}
 
 	pluginProcess(process : Clap.Process) : i32 {
