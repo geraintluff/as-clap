@@ -1,0 +1,30 @@
+{
+  "extends": "./node_modules/@assemblyscript/wasi-shim/asconfig.json",
+  "entries": [
+    "./assembly/clap_entry.ts",
+    "./assembly/index.ts"
+  ],
+  "targets": {
+    "debug": {
+      "outFile": "build/debug.wasm",
+      "sourceMap": true,
+      "debug": true
+    },
+    "release": {
+      "outFile": "build/release.wasm",
+      "sourceMap": true,
+      "optimizeLevel": 3,
+      "shrinkLevel": 0,
+      "converge": true,
+      "noAssert": false
+    }
+  },
+  "options": {
+    "exportStart": "_initialize",
+    "importMemory": true,
+    "sharedMemory": true,
+    "maximumMemory": 32768,
+    "exportTable": true,
+    "enable": ["threads", "simd", "relaxed-simd"]
+  }
+}
