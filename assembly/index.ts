@@ -9,6 +9,7 @@ class MyPlugin extends Clap.Plugin {
 
 	pluginInit() : bool {
 		console.log(`Plugin initialised!  Module path is ${modulePath}`);
+		return true;
 	}
 
 	pluginProcess(process : Clap.Process) : i32 {

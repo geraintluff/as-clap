@@ -24,7 +24,7 @@
     "importMemory": false,
     "sharedMemory": false,
     "exportTable": true,
-    "enable": ["simd", "relaxed-simd"],
+    "enable": ["threads", "simd", "relaxed-simd"],
     "transform": "./transform.js"
   }
 }

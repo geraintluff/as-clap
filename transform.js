@@ -2,20 +2,24 @@ import * as assemblyscript from "assemblyscript"
 import { Transform } from "assemblyscript/transform"
 
 let Node = assemblyscript.Node;
+let NodeKind = assemblyscript.NodeKind;
 let ClassDeclaration = assemblyscript.ClassDeclaration;
 let CommonFlags = assemblyscript.CommonFlags;
 let Parser = assemblyscript.Parser;
+
+function isNode(v) {
+	return typeof v?.kind == 'number';
+}
 
 const logModifications = false;
 
 function walkAst(node, callbackFn) {
 	callbackFn(node);
-	
 	for (let key in node) {
 		let prop = node[key];
-		if (prop instanceof Node) {
+		if (isNode(prop)) {
 			walkAst(prop, callbackFn);
-		} else if (Array.isArray(prop) && prop[0] instanceof Node) {
+		} else if (Array.isArray(prop) && isNode(prop[0])) {
 			prop.forEach(n => walkAst(n, callbackFn));
 		}
 	}
@@ -139,11 +143,13 @@ function replaceArrays(classDeclaration) {
 }
 class WclapTransform extends Transform {
 	afterParse(parsed) {
+		console.log("Applying @property and @array transforms");
+
 		parsed.sources.forEach(source => {
 			if (/^~lib\//.test(source.normalizedPath)) return;
 
 			walkAst(source, node => {
-				if (node instanceof ClassDeclaration) {
+				if (node.kind == NodeKind.ClassDeclaration) {
 					replaceProperties(node);
 					replaceArrays(node);
 				}
