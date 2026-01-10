@@ -1,5 +1,5 @@
-import {fnPtr, modulePath} from "./common.ts"
-import * as Clap from "./clap-plugins.ts"
+import {fnPtr, modulePath} from "./common"
+import * as Clap from "./clap-plugins"
 
 class MyPlugin extends Clap.Plugin {
 

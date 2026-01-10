@@ -108,19 +108,20 @@ function replaceArrays(classDeclaration) {
 			let countArg = parseInt(getSource(decorator.args?.[0]), 10);
 			let name = member.name.text;
 
-			let replacements = [];
-
 			let dummyCode = `class ${classDeclaration.name.text} {
 				@inline get ${name}() : usize {
 					return changetype<usize>(this) + offsetof<${classDeclaration.name.text}>(${JSON.stringify(name + "0")});
+				}
+				@inline set ${name}(v : usize) {
+					assert(v == changetype<usize>(this) + offsetof<${classDeclaration.name.text}>(${JSON.stringify(name + "0")}), "assignment can't actually change values");
 				}
 			}`;
 			let parser = new Parser();
 			parser.parseFile(dummyCode, "array-pointer.ts", false);
 			let dummyClass = parser.currentSource.statements[0];
-			replacements.push(dummyClass.members[0]);
+			let replacements = dummyClass.members;
 
-			walkAst(replacements[0], n => n.range = member.range);
+			walkAst(replacements, n => n.range = member.range);
 
 			for (let i = 0; i < countArg; ++i) {
 				let name = Node.createIdentifierExpression(member.name.text + i, member.name.range, member.name.quoted);
