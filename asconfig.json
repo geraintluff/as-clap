@@ -21,11 +21,10 @@
   },
   "options": {
     "exportStart": "_initialize",
-    "importMemory": true,
-    "sharedMemory": true,
-    "maximumMemory": 32768,
+    "importMemory": false,
+    "sharedMemory": false,
     "exportTable": true,
-    "enable": ["threads", "simd", "relaxed-simd"],
+    "enable": ["simd", "relaxed-simd"],
     "transform": "./transform.js"
   }
 }

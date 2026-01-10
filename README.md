@@ -1,10 +1,18 @@
-# WCLAP written in AssemblyScript
+# CLAP written in AssemblyScript
 
-This is extremely early-stage, but it's a fun proof-of-concept: you can write an audio effect in AssemblyScript using the CLAP plugin format, and then (using the [bridge plugin](https://github.com/WebCLAP/wclap-bridge)) use it in a native DAW.
+This repo shows you can write an audio effect in AssemblyScript using the established CLAP plugin format.  The goal is to become a framework/library for AssemblyScript developers to make audio plugins for wide distribution and serious use.
 
-The actual "effect" is in `assembly/index.ts`.  It's extremely simple for now, just taking a stereo signal and returns the `abs()` of every sample.  The only extension supported so far is `clap.audio-ports`.
+There's an example effect is in `example/index.ts`.  It's extremely simple for now, just taking a stereo signal and returning the `abs()` of every sample.
 
-The dream is for this to become an AssemblyScript framework/library which lets you implement the CLAP API without having to
+### Why CLAP?
+
+AssemblyScript compiles to WASM, so we need a [bridge plugin/library](https://github.com/WebCLAP/wclap-bridge) to run in a native DAW.  If it needs a bridge anyway, wouldn't any API work?
+
+Re-using the CLAP standard (instead of inventing a new format) means the API is production-ready.  The set of extensions/events/etc. is already used by many (commercially-released) plugins, so we're very unlikely to suddenly hit a limitation which requires expanding the API (and therefore the bridge plugin, and this library, or any other tools).
+
+It also gives puts us on a par with other toolchains: a CLAP written in AssemblyScript should behave identically to a C/C++/Rust CLAP compiled to WebAssembly.  This means AS developers can join a larger ecosystem of plugins which target browser DAWs and native DAWs simultaneously.
+
+There's space for other (W)CLAP tools to be created - e.g. using `wasm2c` to recompile WASM into fully-native code.  Using CLAP for the API means such tools can be developed independently, without having to co-ordinate to keep a custom API in line.
 
 ## Code structure
 
