@@ -1,0 +1,14 @@
+{
+	"extends": "as-clap/asconfig.json",
+	"entries": [
+		"./assembly/index.ts"
+	],
+	"targets": {
+		"debug": {
+			"outFile": "./build/debug.wasm"
+		},
+		"release": {
+			"outFile": "./build/release.wasm"
+		}
+	}
+}

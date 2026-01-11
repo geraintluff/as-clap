@@ -4,6 +4,45 @@ This repo shows you can write an audio effect in AssemblyScript using the establ
 
 There's an example effect is in `example/index.ts`.  It's extremely simple for now, just taking a stereo signal and returning the `abs()` of every sample.
 
+### How to use
+
+First install the dependency
+
+```
+npm install --save as-clap
+```
+
+Then extend from the `asconfig.json`, which sets appropriate exports and code transforms:
+
+```json
+{
+  "extends": "./node_modules/as-clap/asconfig.json",
+  "entries": ["./my-effect.ts"],
+  "targets": {
+    "debug": {"outFile": "build/debug.wclap"},
+    "release": {"outFile": "build/release.wclap"}
+  }
+}
+```
+
+From your code, include the CLAP types, extend `Plugin` and register it:
+
+```typescript
+include * as Clap from "./node_modules/as-clap/asconfig.json";
+
+class MyPlugin extends Clap.Plugin {
+	constructor(host : Clap.Host) {
+		super(host);
+	}
+	//...
+}
+
+let pluginDesc = Clap.registerPlugin<MyPlugin>("The Pluginator", "com.example.clap.my-plugin");
+// fill out the descriptor fields
+pluginDesc.vendor = "Really Cool Plugins Ltd.";
+pluginDesc.features = [Clap.PLUGIN_FEATURE_AUDIO_EFFECT, PLUGIN_FEATURE_STEREO];
+```
+
 ### Why CLAP?
 
 AssemblyScript compiles to WASM, so we need a [bridge plugin/library](https://github.com/WebCLAP/wclap-bridge) to run in a native DAW.  If it needs a bridge anyway, wouldn't any API work?
