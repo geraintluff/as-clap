@@ -1,6 +1,6 @@
-import {fnPtr, modulePath} from "./common"
-import * as Core from "./clap-api"
-import {pluginFactory} from "./clap-plugins"
+import {fnPtr} from "./type-helpers"
+import * as Core from "./clap-core"
+import {pluginFactory, modulePath} from "./clap"
 
 //---- CLAP entry ----//
 

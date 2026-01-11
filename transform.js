@@ -11,8 +11,6 @@ function isNode(v) {
 	return typeof v?.kind == 'number';
 }
 
-const logModifications = false;
-
 function walkAst(node, callbackFn) {
 	callbackFn(node);
 	for (let key in node) {
@@ -86,7 +84,7 @@ function replaceProperties(classDeclaration) {
 			changed = true;
 		}
 	}
-	if (changed && logModifications) console.log(assemblyscript.ASTBuilder.build(classDeclaration));
+	return changed;
 }
 
 /* Fixed length arrays:
@@ -140,7 +138,7 @@ function replaceArrays(classDeclaration) {
 			changed = true;
 		}
 	}
-	if (changed && logModifications) console.log(assemblyscript.ASTBuilder.build(classDeclaration));
+	return changed;
 }
 class WclapTransform extends Transform {
 	afterParse(parsed) {
@@ -149,12 +147,16 @@ class WclapTransform extends Transform {
 		parsed.sources.forEach(source => {
 			if (/^~lib\//.test(source.normalizedPath)) return;
 
+			let changed = true;
 			walkAst(source, node => {
 				if (node.kind == NodeKind.ClassDeclaration) {
-					replaceProperties(node);
-					replaceArrays(node);
+					if (replaceProperties(node)) changed = true;
+					if (replaceArrays(node)) changed = true;
 				}
 			});
+			if (changed) {
+				let transformedCode = assemblyscript.ASTBuilder.build(source);
+			}
 		});
 	}
 }

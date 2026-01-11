@@ -1,7 +1,7 @@
 {
   "extends": "./node_modules/@assemblyscript/wasi-shim/asconfig.json",
   "entries": [
-    "./assembly/clap_entry.ts",
+    "./assembly/clap-entry.ts",
     "./assembly/index.ts"
   ],
   "targets": {

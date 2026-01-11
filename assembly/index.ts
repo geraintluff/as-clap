@@ -1,5 +1,4 @@
-import {fnPtr, modulePath} from "./common"
-import * as Clap from "./clap-plugins"
+import * as Clap from "./clap"
 
 class MyPlugin extends Clap.Plugin {
 
@@ -8,7 +7,7 @@ class MyPlugin extends Clap.Plugin {
 	}
 
 	pluginInit() : bool {
-		console.log(`Plugin initialised!  Module path is ${modulePath}`);
+		console.log(`Plugin initialised!  Module path is ${Clap.modulePath}`);
 		return true;
 	}
 

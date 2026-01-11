@@ -1,13 +1,16 @@
-import {fnPtr, modulePath, CString, getCString, setCString, CStringNullable, getCStringNullable, setCStringNullable, CString256, setCString256, getCString256, Renamed, getRenamed, setRenamed, NullablePtr, getNullablePtr, setNullablePtr, CNumArray, getCNumArray, CObjArray, getCObjArray, CPtrArray, getCPtrArray} from "./common.ts"
+import {fnPtr, CString, getCString, setCString, CStringNullable, getCStringNullable, setCStringNullable, CString256, setCString256, getCString256, Renamed, getRenamed, setRenamed, NullablePtr, getNullablePtr, setNullablePtr, CNumArray, getCNumArray, CObjArray, getCObjArray, CPtrArray, getCPtrArray} from "./type-helpers"
 
-import * as Core from "./clap-api"
-export * from "./clap-api"
+import * as Core from "./clap-core"
+export * from "./clap-core"
+
+let modulePath = "";
+export {modulePath};
 
 @unmanaged @final
 export class Version extends Core.clap_version {
-	@property major: Renamed<u32> = this._clap_version_major;
-	@property minor: Renamed<u32> = this._clap_version_minor;
-	@property revision: Renamed<u32> = this._clap_version_revision;
+	@property major: Renamed<u32> = this._major;
+	@property minor: Renamed<u32> = this._minor;
+	@property revision: Renamed<u32> = this._revision;
 }
 
 @unmanaged @final

@@ -16,53 +16,81 @@ There's space for other (W)CLAP tools to be created - e.g. using `wasm2c` to rec
 
 ## Code structure
 
-The support code which provides the CLAP API is mostly in `assembly/clap-plugins.ts`.  This provides a `Plugin` class which you can inherit from (similar to the C++ `clap-helpers`).
+The idea is that your plugin is an ordinary (managed) AssemblyScript class, where you add functionality by overriding methods.  The base-class handles all the awkward function-pointer stuff, and returns you objects with nice properties, _without_ any extra allocations on the audio path.
 
-Any CLAP structures which the plugin doesn't own are translated as `@unmanaged` classes (which means they exist on the heap exactly as described, with no extra GC counters, vtables etc.).  For example, here is `clap_audio_buffer`:
+Here's the effect's process function for a stereo audio effect:
+
+```typescript
+class MyPlugin extends Clap.Plugin {
+	//... setup, describing the stereo audio-ports, etc.
+	
+	pluginProcess(process : Clap.Process) : i32 {
+		let audioIn = process.audioInputs[0];
+		let audioOut = process.audioOutputs[0];
+		let length = process.framesCount;
+		for (let c = 0; c < 2; ++c) {
+			let bufferIn = audioIn.data32[c];
+			let bufferOut = audioOut.data32[c];
+			for (let i: u32 = 0; i < length; ++i) {
+				bufferOut[i] = abs(bufferIn[i]);
+			}
+		}
+		return Clap.PROCESS_CONTINUE;
+	}
+}
+```
+
+The underlying CLAP types are still there, and you may occasionally need to use them, but mostly for plain-data values (e.g. events).  However, you shouldn't need to directly deal with any CLAP types which contain pointers.  Here's how that's organised:
+
+### Core API
+
+The core CLAP API is translated in `assembly/clap-core.ts`, by a script (`dev/translate-clap-api.cjs`) which does string-matching on the CLAP header definitions.  Here's an example of that automatic translation:
 
 ```typescript
 @unmanaged
-export class clap_audio_buffer {
-	readonly _data32 : usize;
-	readonly _data64 : usize;
-	readonly _channel_count : u32;
-	_latency : u32;
-	_constant_mask : u64;
+export class clap_audio_port_info {
+	_id : clap_id;
+	@array(256) _name : i8;
+	_flags : u32;
+	_channel_count : u32;
+	_port_type : usize; // const char *
+	_in_place_pair : clap_id;
 }
 ```
 
-This is a very low-level translation of the CLAP structures, and we can re-interpret the raw `usize` pointers as objects of this class, to use the various fields on it.  It's still not very usable though, so help we also have:
+Any pointers or functions are mapped to `usize`.  We can re-interpret (`changetype`) the raw pointers as a more useful types (e.g. another of the `clap_...` classes) to access their fields.
 
-* Classes and helpers (implemented in `assembly/common.ts`) which extend these low-level translations
-* A `@property` decorator (implemented in `transform.js`) which expands into setters/getters which convert or re-interpret the raw values from the CLAP struct.
+### `Plugin` base class
 
-Armed with these, we extend the basic CLAP structure with a friendlier subclass.  This doesn't add any new fields (meaning their memory layout is the same, and we can just `changetype<>` the value/pointer), but they provide friendly zero-allocation access to the C-style structures:
+The raw CLAP API isn't very AssemblyScript-y, so `assembly/clap.ts` provides a nicer API, including:
+
+* a `Plugin` class which you can inherit from (similar to the C++ `clap-helpers`)
+* `registerPlugin()` for adding your plugin classes to the module
+* a string `modulePath` for the file-path at which the CLAP is loaded.  (Although AssemblyScript can't easily read/write files, if your CLAP is a bundle then you'll need this to assemble `file://` URLs for webview UIs)
+
+The `Plugin` class retains itself while active (so it's not GC'd until destroyed), and fills out all the function pointers for the core API so that they forward to methods:
+
+* The main `clap_plugin` functions forward to methods named `pluginInit()` - e.g. `clap_plugin.activate` becomes the method `.pluginActivate(sampleRate, minFrames, maxFrames)`.
+* Extension functions are mapped to `extensionName...` - e.g. `clap_plugin_audio_ports.count` becomes `.audioPortsCount(isInput)`.
+
+### Friendly classes
+
+Aside from the `Plugin` class (and re-exporting all the `clap_...` core API stuff), `assembly/clap.ts` also provides enhanced versions of the core classes.  These don't actually add any fields, so you can cast core-API objects to these enhanced versions.
 
 ```typescript
 @unmanaged @final
-export class AudioBuffer extends clap_audio_buffer {
-	@property readonly data32 : CPtrArray<CNumArray<f32>> = this._data32;
-	@property readonly data64 : CPtrArray<CNumArray<f64>> = this._data64;
-	@property readonly channelCount : Renamed<u32> = this._channel_count;
-	@property latency : Renamed<u32> = this._latency;
-	@property constantMask : Renamed<u32> = this._constant_mask;
+export class AudioPortInfo extends Core.clap_audio_port_info {
+	@property id : Renamed<clap_id> = this._id;
+	@property name : CString256 = this._name;
+	@property flags : Renamed<u32> = this._flags;
+	@property channelCount : Renamed<u32> = this._channel_count;
+	@property portType : CString = this._port_type;
+	@property inPlacePair : Renamed<clap_id> = this._in_place_pair;
 }
 ```
 
-Here's the effect's process function, where `audioIn` and `audioOut` are `AudioBuffer` instances:
+The `@property` decorator is mapped (by a custom `Transform` in) to custom setters/getters.  For example, where the core class's `_port_type` is a `usize`, when re-interpreted as an `AudioPortInfo` object, you can get/set `portType` using ordinary `string` values, and it gets translated behind the scenes.
 
-```typescript
-pluginProcess(process : Clap.Process) : i32 {
-	let audioIn = process.audioInputs[0];
-	let audioOut = process.audioOutputs[0];
-	let length = process.framesCount;
-	for (let c = 0; c < 2; ++c) {
-		let bufferIn = audioIn.data32[c];
-		let bufferOut = audioOut.data32[c];
-		for (let i: u32 = 0; i < length; ++i) {
-			bufferOut[i] = abs(bufferIn[i]);
-		}
-	}
-	return Clap.PROCESS_CONTINUE;
-}
-```
+### Transform
+
+The transform is implemented in `transform.js`.  As well as `@property`, it also handles the `@array` decorator in the core API, because AssemblyScript doesn't have fixed-size inline arrays.
