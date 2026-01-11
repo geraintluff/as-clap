@@ -1,5 +1,5 @@
 {
-	"extends": "assemblyscript/std/assembly.json",
+	"extends": "./node_modules/@assemblyscript/wasi-shim/assembly/tsconfig.json",
 	"include": [
 		"./**/*.ts"
 	]
