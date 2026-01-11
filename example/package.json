@@ -10,7 +10,7 @@
     "asbuild": "npm run asbuild:debug && npm run asbuild:release"
   },
   "dependencies": {
-    "as-clap": "git+https://github.com/geraintluff/as-clap.git",
+    "as-clap": "geraintluff/as-clap",
     "assemblyscript": "^0.28.9"
   },
   "type": "module"
