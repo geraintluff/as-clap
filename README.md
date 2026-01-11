@@ -13,7 +13,7 @@ npm install --save geraintluff/as-clap
 npm install --save @assemblyscript/wasi-shim
 ```
 
-Then extend from WASI `asconfig.json`, include the `clap-entry.ts` as an entry, and set appropriate options to get a WASI "reactor" module:
+Then extend from WASI `asconfig.json`, and set appropriate options to get a WASI "reactor" module:
 
 ```json
 {
@@ -36,9 +36,11 @@ Then extend from WASI `asconfig.json`, include the `clap-entry.ts` as an entry, 
 }
 ```
 
-From your code, include the CLAP types, extend `Plugin` and register it:
+From your code, re-export all the `clap-entry` symbols.  Also include the CLAP types, extend `Plugin` and register it:
 
 ```typescript
+export * from "as-clap/clap-entry"
+
 include * as Clap from "./node_modules/as-clap";
 
 class MyPlugin extends Clap.Plugin {
@@ -53,6 +55,8 @@ let pluginDesc = Clap.registerPlugin<MyPlugin>("The Pluginator", "com.example.cl
 pluginDesc.vendor = "Really Cool Plugins Ltd.";
 pluginDesc.features = [Clap.PLUGIN_FEATURE_AUDIO_EFFECT, PLUGIN_FEATURE_STEREO];
 ```
+
+There's an example plugin in [`example/`](example/), which you can build with `npm install && npm run asbuild`.
 
 ### Why CLAP?
 
@@ -139,10 +143,12 @@ export class AudioPortInfo extends Core.clap_audio_port_info {
 }
 ```
 
-The `@property` decorator is mapped (by a custom `Transform` in) to custom setters/getters.  For example, where the core class's `_port_type` is a `usize`, when re-interpreted as an `AudioPortInfo` object, you can get/set `portType` using ordinary `string` values, and it gets translated behind the scenes.
-
 ### Transform
 
-The transform is implemented in `transform.js`.  As well as `@property`, it also handles the `@array` decorator in the core API, because AssemblyScript doesn't have fixed-size inline arrays.
+You may have noticed a few non-standard decorators there!  These are handled by a transform implemented in `transform.js`.  However, this is only needed for internal development - the transformed code is written out to `transformed/assembly`, and that's what the top-level `index.ts` and `clap-entry.ts` actually re-export.
 
-It's only needed for internal development, though - the transformed code is written out to `transformed/assembly`, and that is what
+The `@property` decorator is mapped to custom setters/getters, which provide type translation.  For example, where the core class's `_port_type` is a `usize`, when re-interpreted as an `AudioPortInfo` object, you can get/set `portType` using ordinary `string` values, and it gets translated behind the scenes.
+
+As well as `@property`, the transform also handles the `@array` decorator (used in the core API, because AssemblyScript doesn't have fixed-size inline arrays).  The implementation is fairly kludgey, but the short version is that this field (e.g. `clap_audio_port_info:_name`) returns a `usize` pointer to the start of that array.
+
+You can mix-and-match the nice `@property` accessors, and using the underlying core `_field` names.  For example, the `AudioPortInfo:name` is set using a `string` (which is UTF16/WTF16).  To save space, you could instead set `_name` to a null-terminated UTF-8 string constant specified as `memory.data<u8>([...])`.

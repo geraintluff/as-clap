@@ -1,3 +1,5 @@
+export * from "as-clap/clap-entry"
+
 import * as Clap from "as-clap"
 
 class MyPlugin extends Clap.Plugin {
