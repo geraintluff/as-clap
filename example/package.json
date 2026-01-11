@@ -12,10 +12,7 @@
   "dependencies": {
     "as-clap": "geraintluff/as-clap",
     "assemblyscript": "^0.28.9",
-    "wasi-shim": "assemblyscript/wasi-shim#semver:^0.1.0"
-  },
-  "type": "module",
-  "devDependencies": {
     "@assemblyscript/wasi-shim": "^0.1.0"
-  }
+  },
+  "type": "module"
 }

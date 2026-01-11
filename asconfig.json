@@ -1,17 +1,17 @@
 {
 	"extends": "./node_modules/@assemblyscript/wasi-shim/asconfig.json",
 	"entries": [
-		"./assembly/clap-entry.ts"
+		"./assembly/clap-entry.ts",
 		"./example/assembly/index.ts"
 	],
 	"targets": {
 		"debug": {
-			"outFile": "./build/debug.wasm"
+			"outFile": "./build/debug.wasm",
 			"sourceMap": true,
 			"debug": true
 		},
 		"release": {
-			"outFile": "./build/release.wasm"
+			"outFile": "./build/release.wasm",
 			"sourceMap": true,
 			"optimizeLevel": 3,
 			"shrinkLevel": 0,
@@ -21,6 +21,7 @@
 	},
 	"options": {
 		"exportStart": "_initialize",
+		"path": "./",
 		"importMemory": false,
 		"sharedMemory": false,
 		"exportTable": true,

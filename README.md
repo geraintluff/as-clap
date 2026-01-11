@@ -6,21 +6,32 @@ There's an example effect is in `example/index.ts`.  It's extremely simple for n
 
 ### How to use
 
-First install the dependency
+First install this and the [wasi-shim](https://github.com/AssemblyScript/wasi-shim/blob/main/asconfig.json):
 
 ```
-npm install --save as-clap
+npm install --save geraintluff/as-clap
+npm install --save @assemblyscript/wasi-shim
 ```
 
-Then extend from the `asconfig.json`, which sets appropriate exports and code transforms:
+Then extend from WASI `asconfig.json`, include the `clap-entry.ts` as an entry, and set appropriate options to get a WASI "reactor" module:
 
 ```json
 {
-  "extends": "./node_modules/as-clap/asconfig.json",
-  "entries": ["./my-effect.ts"],
+  "extends": "./node_modules/@assemblyscript/wasi-shim/asconfig.json",
+  "entries": [
+    "./my-effect.ts",
+    "./node_modules/as-clap/clap-entry.ts"
+  ],
   "targets": {
-    "debug": {"outFile": "build/debug.wclap"},
-    "release": {"outFile": "build/release.wclap"}
+    "debug": {"outFile": "build/debug.wclap.wasm"},
+    "release": {"outFile": "build/release.wclap.wasm", "optimizeLevel": 3}
+  },
+  "options": {
+    "exportStart": "_initialize",
+    "importMemory": false,
+    "sharedMemory": false,
+    "exportTable": true,
+    "enable": ["simd", "relaxed-simd"]
   }
 }
 ```
@@ -28,7 +39,7 @@ Then extend from the `asconfig.json`, which sets appropriate exports and code tr
 From your code, include the CLAP types, extend `Plugin` and register it:
 
 ```typescript
-include * as Clap from "./node_modules/as-clap/asconfig.json";
+include * as Clap from "./node_modules/as-clap";
 
 class MyPlugin extends Clap.Plugin {
 	constructor(host : Clap.Host) {
@@ -133,3 +144,5 @@ The `@property` decorator is mapped (by a custom `Transform` in) to custom sette
 ### Transform
 
 The transform is implemented in `transform.js`.  As well as `@property`, it also handles the `@array` decorator in the core API, because AssemblyScript doesn't have fixed-size inline arrays.
+
+It's only needed for internal development, though - the transformed code is written out to `transformed/assembly`, and that is what

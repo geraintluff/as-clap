@@ -6,12 +6,12 @@
 	],
 	"targets": {
 		"debug": {
-			"outFile": "./build/debug.wasm"
+			"outFile": "./build/debug.wasm",
 			"sourceMap": true,
 			"debug": true
 		},
 		"release": {
-			"outFile": "./build/release.wasm"
+			"outFile": "./build/release.wasm",
 			"sourceMap": true,
 			"optimizeLevel": 3,
 			"shrinkLevel": 0,
@@ -24,7 +24,6 @@
 		"importMemory": false,
 		"sharedMemory": false,
 		"exportTable": true,
-		"enable": ["simd", "relaxed-simd"],
-		"transform": "./transform.js"
+		"enable": ["simd", "relaxed-simd"]
 	}
 }

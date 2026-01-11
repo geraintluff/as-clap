@@ -1,4 +1,4 @@
-import * as Clap from "../node_modules/as-clap"
+import * as Clap from "as-clap"
 
 class MyPlugin extends Clap.Plugin {
 

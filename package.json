@@ -6,8 +6,16 @@
   "ascMain": "assembly/clap.ts",
   "author": "Geraint <geraint@signalsmith-audio.co.uk>",
   "license": "BSL",
-  "devDependencies": {
-    "assemblyscript": "^0.28.9"
+  "scripts": {
+    "asbuild": "asc --target release"
   },
-  "type": "module"
+  "devDependencies": {
+    "@assemblyscript/wasi-shim": "^0.1.0",
+    "assemblyscript": "^0.28.9",
+    "as-clap": "file:./"
+  },
+  "type": "module",
+  "dependencies": {
+    "as-clap": "github:geraintluff/as-clap"
+  }
 }

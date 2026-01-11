@@ -156,9 +156,11 @@ class WclapTransform extends Transform {
 					if (replaceArrays(node)) changed = true;
 				}
 			});
+			if (/^example\//.test(source.normalizedPath)) return; // don't generate this one
+			
 			let transformedPath = "./transformed/" + source.normalizedPath;
 			let transformedCode = assemblyscript.ASTBuilder.build(source);
-			console.log(source.normalizedPath, transformedPath);
+			console.log(`	${source.normalizedPath} -> ${transformedPath}`);
 			fs.writeFileSync(transformedPath, transformedCode);
 		});
 	}
