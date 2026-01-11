@@ -1,6 +1,8 @@
 import * as assemblyscript from "assemblyscript"
 import { Transform } from "assemblyscript/transform"
 
+import * as fs from "node:fs"
+
 let Node = assemblyscript.Node;
 let NodeKind = assemblyscript.NodeKind;
 let ClassDeclaration = assemblyscript.ClassDeclaration;
@@ -154,9 +156,10 @@ class WclapTransform extends Transform {
 					if (replaceArrays(node)) changed = true;
 				}
 			});
-			if (changed) {
-				//let transformedCode = assemblyscript.ASTBuilder.build(source);
-			}
+			let transformedPath = "./transformed/" + source.normalizedPath;
+			let transformedCode = assemblyscript.ASTBuilder.build(source);
+			console.log(source.normalizedPath, transformedPath);
+			fs.writeFileSync(transformedPath, transformedCode);
 		});
 	}
 }

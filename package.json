@@ -9,5 +9,8 @@
   "dependencies": {
     "@assemblyscript/wasi-shim": "^0.1.0"
   },
+  "devDependencies": {
+    "assemblyscript": "^0.28.9"
+  },
   "type": "module"
 }

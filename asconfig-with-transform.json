@@ -1,7 +1,7 @@
 {
 	"extends": "./node_modules/@assemblyscript/wasi-shim/asconfig.json",
 	"entries": [
-		"./transformed/assembly/clap-entry.ts"
+		"./assembly/clap-entry.ts"
 	],
 	"targets": {
 		"debug": {
@@ -21,6 +21,7 @@
 		"importMemory": false,
 		"sharedMemory": false,
 		"exportTable": true,
-		"enable": ["simd", "relaxed-simd"]
+		"enable": ["simd", "relaxed-simd"],
+		"transform": "./transform.js"
 	}
 }

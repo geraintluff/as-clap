@@ -1,5 +1,5 @@
 {
-	"extends": "as-clap/asconfig.json",
+	"extends": "./node_modules/as-clap/transformed/asconfig.json",
 	"entries": [
 		"./assembly/index.ts"
 	],
