@@ -155,7 +155,7 @@ class WclapTransform extends Transform {
 				}
 			});
 			if (changed) {
-				let transformedCode = assemblyscript.ASTBuilder.build(source);
+				//let transformedCode = assemblyscript.ASTBuilder.build(source);
 			}
 		});
 	}
