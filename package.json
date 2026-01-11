@@ -6,9 +6,6 @@
   "ascMain": "assembly/clap.ts",
   "author": "Geraint <geraint@signalsmith-audio.co.uk>",
   "license": "BSL",
-  "dependencies": {
-    "@assemblyscript/wasi-shim": "^0.1.0"
-  },
   "devDependencies": {
     "assemblyscript": "^0.28.9"
   },

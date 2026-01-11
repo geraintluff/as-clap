@@ -1,14 +1,30 @@
 {
-	"extends": "./node_modules/as-clap/transformed/asconfig.json",
+	"extends": "./node_modules/@assemblyscript/wasi-shim/asconfig.json",
 	"entries": [
-		"./assembly/index.ts"
+		"./assembly/index.ts",
+		"./node_modules/as-clap/clap-entry.ts"
 	],
 	"targets": {
 		"debug": {
 			"outFile": "./build/debug.wasm"
+			"sourceMap": true,
+			"debug": true
 		},
 		"release": {
 			"outFile": "./build/release.wasm"
+			"sourceMap": true,
+			"optimizeLevel": 3,
+			"shrinkLevel": 0,
+			"converge": true,
+			"noAssert": false
 		}
+	},
+	"options": {
+		"exportStart": "_initialize",
+		"importMemory": false,
+		"sharedMemory": false,
+		"exportTable": true,
+		"enable": ["simd", "relaxed-simd"],
+		"transform": "./transform.js"
 	}
 }
