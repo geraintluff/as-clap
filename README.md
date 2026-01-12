@@ -2,15 +2,14 @@
 
 This repo shows you can write an audio effect in AssemblyScript using the established CLAP plugin format.  The goal is to become a framework/library for AssemblyScript developers to make audio plugins for wide distribution and serious use.
 
-There's an example effect is in `example/index.ts`.  It's extremely simple for now, just taking a stereo signal and returning the `abs()` of every sample.
+There's an example plugin in [`example/`](example/).  You can copy this directory, run `npm install && npm run asbuild && npm run open` and go from there.
 
 ### How to use
 
 First install this and the [wasi-shim](https://github.com/AssemblyScript/wasi-shim/blob/main/asconfig.json):
 
 ```
-npm install --save geraintluff/as-clap
-npm install --save @assemblyscript/wasi-shim
+npm install --save geraintluff/as-clap @assemblyscript/wasi-shim
 ```
 
 Then extend from WASI `asconfig.json`, and set appropriate options to get a WASI "reactor" module:
@@ -53,10 +52,8 @@ class MyPlugin extends Clap.Plugin {
 let pluginDesc = Clap.registerPlugin<MyPlugin>("The Pluginator", "com.example.clap.my-plugin");
 // fill out the descriptor fields
 pluginDesc.vendor = "Really Cool Plugins Ltd.";
-pluginDesc.features = [Clap.PLUGIN_FEATURE_AUDIO_EFFECT, PLUGIN_FEATURE_STEREO];
+pluginDesc.features = [Clap.PLUGIN_FEATURE_AUDIO_EFFECT];
 ```
-
-There's an example plugin in [`example/`](example/), which you can build with `npm install && npm run asbuild`.
 
 ### Why CLAP?
 

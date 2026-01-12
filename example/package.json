@@ -7,12 +7,16 @@
   "scripts": {
     "asbuild:debug": "asc assembly/index.ts --target debug",
     "asbuild:release": "asc assembly/index.ts --target release",
-    "asbuild": "npm run asbuild:debug && npm run asbuild:release"
+    "asbuild": "npm run asbuild:debug && npm run asbuild:release",
+    "open": "http-server --port 0 --cors -o /open.html -c-1v"
   },
   "dependencies": {
+    "@assemblyscript/wasi-shim": "^0.1.0",
     "as-clap": "geraintluff/as-clap",
-    "assemblyscript": "^0.28.9",
-    "@assemblyscript/wasi-shim": "^0.1.0"
+    "assemblyscript": "^0.28.9"
   },
-  "type": "module"
+  "type": "module",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
 }
