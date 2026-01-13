@@ -7484,383 +7484,288 @@ export class Strings {
 @unmanaged
 @final
 export class Utf8 {
-  @inline
   static get PLUGIN_FEATURE_INSTRUMENT(): usize {
     return memory.data<u8>([105, 110, 115, 116, 114, 117, 109, 101, 110, 116, 0]);
   }
-  @inline
   static get PLUGIN_FEATURE_AUDIO_EFFECT(): usize {
     return memory.data<u8>([97, 117, 100, 105, 111, 45, 101, 102, 102, 101, 99, 116, 0]);
   }
-  @inline
   static get PLUGIN_FEATURE_NOTE_EFFECT(): usize {
     return memory.data<u8>([110, 111, 116, 101, 45, 101, 102, 102, 101, 99, 116, 0]);
   }
-  @inline
   static get PLUGIN_FEATURE_NOTE_DETECTOR(): usize {
     return memory.data<u8>([110, 111, 116, 101, 45, 100, 101, 116, 101, 99, 116, 111, 114, 0]);
   }
-  @inline
   static get PLUGIN_FEATURE_ANALYZER(): usize {
     return memory.data<u8>([97, 110, 97, 108, 121, 122, 101, 114, 0]);
   }
-  @inline
   static get PLUGIN_FEATURE_SYNTHESIZER(): usize {
     return memory.data<u8>([115, 121, 110, 116, 104, 101, 115, 105, 122, 101, 114, 0]);
   }
-  @inline
   static get PLUGIN_FEATURE_SAMPLER(): usize {
     return memory.data<u8>([115, 97, 109, 112, 108, 101, 114, 0]);
   }
-  @inline
   static get PLUGIN_FEATURE_DRUM(): usize {
     return memory.data<u8>([100, 114, 117, 109, 0]);
   }
-  @inline
   static get PLUGIN_FEATURE_DRUM_MACHINE(): usize {
     return memory.data<u8>([100, 114, 117, 109, 45, 109, 97, 99, 104, 105, 110, 101, 0]);
   }
-  @inline
   static get PLUGIN_FEATURE_FILTER(): usize {
     return memory.data<u8>([102, 105, 108, 116, 101, 114, 0]);
   }
-  @inline
   static get PLUGIN_FEATURE_PHASER(): usize {
     return memory.data<u8>([112, 104, 97, 115, 101, 114, 0]);
   }
-  @inline
   static get PLUGIN_FEATURE_EQUALIZER(): usize {
     return memory.data<u8>([101, 113, 117, 97, 108, 105, 122, 101, 114, 0]);
   }
-  @inline
   static get PLUGIN_FEATURE_DEESSER(): usize {
     return memory.data<u8>([100, 101, 45, 101, 115, 115, 101, 114, 0]);
   }
-  @inline
   static get PLUGIN_FEATURE_PHASE_VOCODER(): usize {
     return memory.data<u8>([112, 104, 97, 115, 101, 45, 118, 111, 99, 111, 100, 101, 114, 0]);
   }
-  @inline
   static get PLUGIN_FEATURE_GRANULAR(): usize {
     return memory.data<u8>([103, 114, 97, 110, 117, 108, 97, 114, 0]);
   }
-  @inline
   static get PLUGIN_FEATURE_FREQUENCY_SHIFTER(): usize {
     return memory.data<u8>([102, 114, 101, 113, 117, 101, 110, 99, 121, 45, 115, 104, 105, 102, 116, 101, 114, 0]);
   }
-  @inline
   static get PLUGIN_FEATURE_PITCH_SHIFTER(): usize {
     return memory.data<u8>([112, 105, 116, 99, 104, 45, 115, 104, 105, 102, 116, 101, 114, 0]);
   }
-  @inline
   static get PLUGIN_FEATURE_DISTORTION(): usize {
     return memory.data<u8>([100, 105, 115, 116, 111, 114, 116, 105, 111, 110, 0]);
   }
-  @inline
   static get PLUGIN_FEATURE_TRANSIENT_SHAPER(): usize {
     return memory.data<u8>([116, 114, 97, 110, 115, 105, 101, 110, 116, 45, 115, 104, 97, 112, 101, 114, 0]);
   }
-  @inline
   static get PLUGIN_FEATURE_COMPRESSOR(): usize {
     return memory.data<u8>([99, 111, 109, 112, 114, 101, 115, 115, 111, 114, 0]);
   }
-  @inline
   static get PLUGIN_FEATURE_EXPANDER(): usize {
     return memory.data<u8>([101, 120, 112, 97, 110, 100, 101, 114, 0]);
   }
-  @inline
   static get PLUGIN_FEATURE_GATE(): usize {
     return memory.data<u8>([103, 97, 116, 101, 0]);
   }
-  @inline
   static get PLUGIN_FEATURE_LIMITER(): usize {
     return memory.data<u8>([108, 105, 109, 105, 116, 101, 114, 0]);
   }
-  @inline
   static get PLUGIN_FEATURE_FLANGER(): usize {
     return memory.data<u8>([102, 108, 97, 110, 103, 101, 114, 0]);
   }
-  @inline
   static get PLUGIN_FEATURE_CHORUS(): usize {
     return memory.data<u8>([99, 104, 111, 114, 117, 115, 0]);
   }
-  @inline
   static get PLUGIN_FEATURE_DELAY(): usize {
     return memory.data<u8>([100, 101, 108, 97, 121, 0]);
   }
-  @inline
   static get PLUGIN_FEATURE_REVERB(): usize {
     return memory.data<u8>([114, 101, 118, 101, 114, 98, 0]);
   }
-  @inline
   static get PLUGIN_FEATURE_TREMOLO(): usize {
     return memory.data<u8>([116, 114, 101, 109, 111, 108, 111, 0]);
   }
-  @inline
   static get PLUGIN_FEATURE_GLITCH(): usize {
     return memory.data<u8>([103, 108, 105, 116, 99, 104, 0]);
   }
-  @inline
   static get PLUGIN_FEATURE_UTILITY(): usize {
     return memory.data<u8>([117, 116, 105, 108, 105, 116, 121, 0]);
   }
-  @inline
   static get PLUGIN_FEATURE_PITCH_CORRECTION(): usize {
     return memory.data<u8>([112, 105, 116, 99, 104, 45, 99, 111, 114, 114, 101, 99, 116, 105, 111, 110, 0]);
   }
-  @inline
   static get PLUGIN_FEATURE_RESTORATION(): usize {
     return memory.data<u8>([114, 101, 115, 116, 111, 114, 97, 116, 105, 111, 110, 0]);
   }
-  @inline
   static get PLUGIN_FEATURE_MULTI_EFFECTS(): usize {
     return memory.data<u8>([109, 117, 108, 116, 105, 45, 101, 102, 102, 101, 99, 116, 115, 0]);
   }
-  @inline
   static get PLUGIN_FEATURE_MIXING(): usize {
     return memory.data<u8>([109, 105, 120, 105, 110, 103, 0]);
   }
-  @inline
   static get PLUGIN_FEATURE_MASTERING(): usize {
     return memory.data<u8>([109, 97, 115, 116, 101, 114, 105, 110, 103, 0]);
   }
-  @inline
   static get PLUGIN_FEATURE_MONO(): usize {
     return memory.data<u8>([109, 111, 110, 111, 0]);
   }
-  @inline
   static get PLUGIN_FEATURE_STEREO(): usize {
     return memory.data<u8>([115, 116, 101, 114, 101, 111, 0]);
   }
-  @inline
   static get PLUGIN_FEATURE_SURROUND(): usize {
     return memory.data<u8>([115, 117, 114, 114, 111, 117, 110, 100, 0]);
   }
-  @inline
   static get PLUGIN_FEATURE_AMBISONIC(): usize {
     return memory.data<u8>([97, 109, 98, 105, 115, 111, 110, 105, 99, 0]);
   }
-  @inline
   static get EXT_AMBISONIC(): usize {
     return memory.data<u8>([99, 108, 97, 112, 46, 97, 109, 98, 105, 115, 111, 110, 105, 99, 47, 51, 0]);
   }
-  @inline
   static get EXT_AMBISONIC_COMPAT(): usize {
     return memory.data<u8>([99, 108, 97, 112, 46, 97, 109, 98, 105, 115, 111, 110, 105, 99, 46, 100, 114, 97, 102, 116, 47, 51, 0]);
   }
-  @inline
   static get PORT_AMBISONIC(): usize {
     return memory.data<u8>([97, 109, 98, 105, 115, 111, 110, 105, 99, 0]);
   }
-  @inline
   static get EXT_AUDIO_PORTS_ACTIVATION(): usize {
     return memory.data<u8>([99, 108, 97, 112, 46, 97, 117, 100, 105, 111, 45, 112, 111, 114, 116, 115, 45, 97, 99, 116, 105, 118, 97, 116, 105, 111, 110, 47, 50, 0]);
   }
-  @inline
   static get EXT_AUDIO_PORTS_ACTIVATION_COMPAT(): usize {
     return memory.data<u8>([99, 108, 97, 112, 46, 97, 117, 100, 105, 111, 45, 112, 111, 114, 116, 115, 45, 97, 99, 116, 105, 118, 97, 116, 105, 111, 110, 47, 100, 114, 97, 102, 116, 45, 50, 0]);
   }
-  @inline
   static get EXT_AUDIO_PORTS(): usize {
     return memory.data<u8>([99, 108, 97, 112, 46, 97, 117, 100, 105, 111, 45, 112, 111, 114, 116, 115, 0]);
   }
-  @inline
   static get PORT_MONO(): usize {
     return memory.data<u8>([109, 111, 110, 111, 0]);
   }
-  @inline
   static get PORT_STEREO(): usize {
     return memory.data<u8>([115, 116, 101, 114, 101, 111, 0]);
   }
-  @inline
   static get EXT_AUDIO_PORTS_CONFIG(): usize {
     return memory.data<u8>([99, 108, 97, 112, 46, 97, 117, 100, 105, 111, 45, 112, 111, 114, 116, 115, 45, 99, 111, 110, 102, 105, 103, 0]);
   }
-  @inline
   static get EXT_AUDIO_PORTS_CONFIG_INFO(): usize {
     return memory.data<u8>([99, 108, 97, 112, 46, 97, 117, 100, 105, 111, 45, 112, 111, 114, 116, 115, 45, 99, 111, 110, 102, 105, 103, 45, 105, 110, 102, 111, 47, 49, 0]);
   }
-  @inline
   static get EXT_AUDIO_PORTS_CONFIG_INFO_COMPAT(): usize {
     return memory.data<u8>([99, 108, 97, 112, 46, 97, 117, 100, 105, 111, 45, 112, 111, 114, 116, 115, 45, 99, 111, 110, 102, 105, 103, 45, 105, 110, 102, 111, 47, 100, 114, 97, 102, 116, 45, 48, 0]);
   }
-  @inline
   static get EXT_CONFIGURABLE_AUDIO_PORTS(): usize {
     return memory.data<u8>([99, 108, 97, 112, 46, 99, 111, 110, 102, 105, 103, 117, 114, 97, 98, 108, 101, 45, 97, 117, 100, 105, 111, 45, 112, 111, 114, 116, 115, 47, 49, 0]);
   }
-  @inline
   static get EXT_CONFIGURABLE_AUDIO_PORTS_COMPAT(): usize {
     return memory.data<u8>([99, 108, 97, 112, 46, 99, 111, 110, 102, 105, 103, 117, 114, 97, 98, 108, 101, 45, 97, 117, 100, 105, 111, 45, 112, 111, 114, 116, 115, 46, 100, 114, 97, 102, 116, 49, 0]);
   }
-  @inline
   static get EXT_CONTEXT_MENU(): usize {
     return memory.data<u8>([99, 108, 97, 112, 46, 99, 111, 110, 116, 101, 120, 116, 45, 109, 101, 110, 117, 47, 49, 0]);
   }
-  @inline
   static get EXT_CONTEXT_MENU_COMPAT(): usize {
     return memory.data<u8>([99, 108, 97, 112, 46, 99, 111, 110, 116, 101, 120, 116, 45, 109, 101, 110, 117, 46, 100, 114, 97, 102, 116, 47, 48, 0]);
   }
-  @inline
   static get EXT_EVENT_REGISTRY(): usize {
     return memory.data<u8>([99, 108, 97, 112, 46, 101, 118, 101, 110, 116, 45, 114, 101, 103, 105, 115, 116, 114, 121, 0]);
   }
-  @inline
   static get EXT_GUI(): usize {
     return memory.data<u8>([99, 108, 97, 112, 46, 103, 117, 105, 0]);
   }
-  @inline
   static get EXT_LATENCY(): usize {
     return memory.data<u8>([99, 108, 97, 112, 46, 108, 97, 116, 101, 110, 99, 121, 0]);
   }
-  @inline
   static get EXT_LOG(): usize {
     return memory.data<u8>([99, 108, 97, 112, 46, 108, 111, 103, 0]);
   }
-  @inline
   static get EXT_NOTE_NAME(): usize {
     return memory.data<u8>([99, 108, 97, 112, 46, 110, 111, 116, 101, 45, 110, 97, 109, 101, 0]);
   }
-  @inline
   static get EXT_NOTE_PORTS(): usize {
     return memory.data<u8>([99, 108, 97, 112, 46, 110, 111, 116, 101, 45, 112, 111, 114, 116, 115, 0]);
   }
-  @inline
   static get EXT_PARAMS(): usize {
     return memory.data<u8>([99, 108, 97, 112, 46, 112, 97, 114, 97, 109, 115, 0]);
   }
-  @inline
   static get EXT_PARAM_INDICATION(): usize {
     return memory.data<u8>([99, 108, 97, 112, 46, 112, 97, 114, 97, 109, 45, 105, 110, 100, 105, 99, 97, 116, 105, 111, 110, 47, 52, 0]);
   }
-  @inline
   static get EXT_PARAM_INDICATION_COMPAT(): usize {
     return memory.data<u8>([99, 108, 97, 112, 46, 112, 97, 114, 97, 109, 45, 105, 110, 100, 105, 99, 97, 116, 105, 111, 110, 46, 100, 114, 97, 102, 116, 47, 52, 0]);
   }
-  @inline
   static get EXT_POSIX_FD_SUPPORT(): usize {
     return memory.data<u8>([99, 108, 97, 112, 46, 112, 111, 115, 105, 120, 45, 102, 100, 45, 115, 117, 112, 112, 111, 114, 116, 0]);
   }
-  @inline
   static get EXT_PRESET_LOAD(): usize {
     return memory.data<u8>([99, 108, 97, 112, 46, 112, 114, 101, 115, 101, 116, 45, 108, 111, 97, 100, 47, 50, 0]);
   }
-  @inline
   static get EXT_PRESET_LOAD_COMPAT(): usize {
     return memory.data<u8>([99, 108, 97, 112, 46, 112, 114, 101, 115, 101, 116, 45, 108, 111, 97, 100, 46, 100, 114, 97, 102, 116, 47, 50, 0]);
   }
-  @inline
   static get EXT_REMOTE_CONTROLS(): usize {
     return memory.data<u8>([99, 108, 97, 112, 46, 114, 101, 109, 111, 116, 101, 45, 99, 111, 110, 116, 114, 111, 108, 115, 47, 50, 0]);
   }
-  @inline
   static get EXT_REMOTE_CONTROLS_COMPAT(): usize {
     return memory.data<u8>([99, 108, 97, 112, 46, 114, 101, 109, 111, 116, 101, 45, 99, 111, 110, 116, 114, 111, 108, 115, 46, 100, 114, 97, 102, 116, 47, 50, 0]);
   }
-  @inline
   static get EXT_RENDER(): usize {
     return memory.data<u8>([99, 108, 97, 112, 46, 114, 101, 110, 100, 101, 114, 0]);
   }
-  @inline
   static get EXT_STATE_CONTEXT(): usize {
     return memory.data<u8>([99, 108, 97, 112, 46, 115, 116, 97, 116, 101, 45, 99, 111, 110, 116, 101, 120, 116, 47, 50, 0]);
   }
-  @inline
   static get EXT_STATE(): usize {
     return memory.data<u8>([99, 108, 97, 112, 46, 115, 116, 97, 116, 101, 0]);
   }
-  @inline
   static get EXT_SURROUND(): usize {
     return memory.data<u8>([99, 108, 97, 112, 46, 115, 117, 114, 114, 111, 117, 110, 100, 47, 52, 0]);
   }
-  @inline
   static get EXT_SURROUND_COMPAT(): usize {
     return memory.data<u8>([99, 108, 97, 112, 46, 115, 117, 114, 114, 111, 117, 110, 100, 46, 100, 114, 97, 102, 116, 47, 52, 0]);
   }
-  @inline
   static get PORT_SURROUND(): usize {
     return memory.data<u8>([115, 117, 114, 114, 111, 117, 110, 100, 0]);
   }
-  @inline
   static get EXT_TAIL(): usize {
     return memory.data<u8>([99, 108, 97, 112, 46, 116, 97, 105, 108, 0]);
   }
-  @inline
   static get EXT_THREAD_CHECK(): usize {
     return memory.data<u8>([99, 108, 97, 112, 46, 116, 104, 114, 101, 97, 100, 45, 99, 104, 101, 99, 107, 0]);
   }
-  @inline
   static get EXT_THREAD_POOL(): usize {
     return memory.data<u8>([99, 108, 97, 112, 46, 116, 104, 114, 101, 97, 100, 45, 112, 111, 111, 108, 0]);
   }
-  @inline
   static get EXT_TIMER_SUPPORT(): usize {
     return memory.data<u8>([99, 108, 97, 112, 46, 116, 105, 109, 101, 114, 45, 115, 117, 112, 112, 111, 114, 116, 0]);
   }
-  @inline
   static get EXT_TRACK_INFO(): usize {
     return memory.data<u8>([99, 108, 97, 112, 46, 116, 114, 97, 99, 107, 45, 105, 110, 102, 111, 47, 49, 0]);
   }
-  @inline
   static get EXT_TRACK_INFO_COMPAT(): usize {
     return memory.data<u8>([99, 108, 97, 112, 46, 116, 114, 97, 99, 107, 45, 105, 110, 102, 111, 46, 100, 114, 97, 102, 116, 47, 49, 0]);
   }
-  @inline
   static get EXT_VOICE_INFO(): usize {
     return memory.data<u8>([99, 108, 97, 112, 46, 118, 111, 105, 99, 101, 45, 105, 110, 102, 111, 0]);
   }
-  @inline
   static get PLUGIN_STATE_CONVERTER_FACTORY_ID(): usize {
     return memory.data<u8>([99, 108, 97, 112, 46, 112, 108, 117, 103, 105, 110, 45, 115, 116, 97, 116, 101, 45, 99, 111, 110, 118, 101, 114, 116, 101, 114, 45, 102, 97, 99, 116, 111, 114, 121, 47, 49, 0]);
   }
-  @inline
   static get EXT_EXTENSIBLE_AUDIO_PORTS(): usize {
     return memory.data<u8>([99, 108, 97, 112, 46, 101, 120, 116, 101, 110, 115, 105, 98, 108, 101, 45, 97, 117, 100, 105, 111, 45, 112, 111, 114, 116, 115, 47, 49, 0]);
   }
-  @inline
   static get EXT_GAIN_ADJUSTMENT_METERING(): usize {
     return memory.data<u8>([99, 108, 97, 112, 46, 103, 97, 105, 110, 45, 97, 100, 106, 117, 115, 116, 109, 101, 110, 116, 45, 109, 101, 116, 101, 114, 105, 110, 103, 47, 48, 0]);
   }
-  @inline
   static get EXT_MINI_CURVE_DISPLAY(): usize {
     return memory.data<u8>([99, 108, 97, 112, 46, 109, 105, 110, 105, 45, 99, 117, 114, 118, 101, 45, 100, 105, 115, 112, 108, 97, 121, 47, 51, 0]);
   }
-  @inline
   static get EXT_PROJECT_LOCATION(): usize {
     return memory.data<u8>([99, 108, 97, 112, 46, 112, 114, 111, 106, 101, 99, 116, 45, 108, 111, 99, 97, 116, 105, 111, 110, 47, 50, 0]);
   }
-  @inline
   static get EXT_RESOURCE_DIRECTORY(): usize {
     return memory.data<u8>([99, 108, 97, 112, 46, 114, 101, 115, 111, 117, 114, 99, 101, 45, 100, 105, 114, 101, 99, 116, 111, 114, 121, 47, 49, 0]);
   }
-  @inline
   static get EXT_SCRATCH_MEMORY(): usize {
     return memory.data<u8>([99, 108, 97, 112, 46, 115, 99, 114, 97, 116, 99, 104, 45, 109, 101, 109, 111, 114, 121, 47, 49, 0]);
   }
-  @inline
   static get EXT_TRANSPORT_CONTROL(): usize {
     return memory.data<u8>([99, 108, 97, 112, 46, 116, 114, 97, 110, 115, 112, 111, 114, 116, 45, 99, 111, 110, 116, 114, 111, 108, 47, 49, 0]);
   }
-  @inline
   static get EXT_TRIGGERS(): usize {
     return memory.data<u8>([99, 108, 97, 112, 46, 116, 114, 105, 103, 103, 101, 114, 115, 47, 49, 0]);
   }
-  @inline
   static get EXT_TUNING(): usize {
     return memory.data<u8>([99, 108, 97, 112, 46, 116, 117, 110, 105, 110, 103, 47, 50, 0]);
   }
-  @inline
   static get EXT_UNDO(): usize {
     return memory.data<u8>([99, 108, 97, 112, 46, 117, 110, 100, 111, 47, 52, 0]);
   }
-  @inline
   static get EXT_UNDO_CONTEXT(): usize {
     return memory.data<u8>([99, 108, 97, 112, 46, 117, 110, 100, 111, 95, 99, 111, 110, 116, 101, 120, 116, 47, 52, 0]);
   }
-  @inline
   static get EXT_UNDO_DELTA(): usize {
     return memory.data<u8>([99, 108, 97, 112, 46, 117, 110, 100, 111, 95, 100, 101, 108, 116, 97, 47, 52, 0]);
   }
-  @inline
   static get EXT_WEBVIEW(): usize {
     return memory.data<u8>([99, 108, 97, 112, 46, 119, 101, 98, 118, 105, 101, 119, 47, 51, 0]);
   }

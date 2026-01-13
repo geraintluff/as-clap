@@ -230,7 +230,7 @@ stringConstants.forEach(pair => {
 	let hex = bytes.map(c => '0x' + c.toString(16)).join(',');
 	let code = `memory.data<u8>([${hex}])`;
 	asCode += `
-		@inline static get ${pair.name}() : usize { return ${code}; }`;
+		static get ${pair.name}() : usize { return ${code}; }`;
 });
 asCode += `
 }`;
