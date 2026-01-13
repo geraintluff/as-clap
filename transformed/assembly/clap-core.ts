@@ -295,45 +295,6 @@ export class clap_process {
   _in_events: usize;
   _out_events: usize;
 }
-export const PLUGIN_FEATURE_INSTRUMENT = "instrument";
-export const PLUGIN_FEATURE_AUDIO_EFFECT = "audio-effect";
-export const PLUGIN_FEATURE_NOTE_EFFECT = "note-effect";
-export const PLUGIN_FEATURE_NOTE_DETECTOR = "note-detector";
-export const PLUGIN_FEATURE_ANALYZER = "analyzer";
-export const PLUGIN_FEATURE_SYNTHESIZER = "synthesizer";
-export const PLUGIN_FEATURE_SAMPLER = "sampler";
-export const PLUGIN_FEATURE_DRUM = "drum";
-export const PLUGIN_FEATURE_DRUM_MACHINE = "drum-machine";
-export const PLUGIN_FEATURE_FILTER = "filter";
-export const PLUGIN_FEATURE_PHASER = "phaser";
-export const PLUGIN_FEATURE_EQUALIZER = "equalizer";
-export const PLUGIN_FEATURE_DEESSER = "de-esser";
-export const PLUGIN_FEATURE_PHASE_VOCODER = "phase-vocoder";
-export const PLUGIN_FEATURE_GRANULAR = "granular";
-export const PLUGIN_FEATURE_FREQUENCY_SHIFTER = "frequency-shifter";
-export const PLUGIN_FEATURE_PITCH_SHIFTER = "pitch-shifter";
-export const PLUGIN_FEATURE_DISTORTION = "distortion";
-export const PLUGIN_FEATURE_TRANSIENT_SHAPER = "transient-shaper";
-export const PLUGIN_FEATURE_COMPRESSOR = "compressor";
-export const PLUGIN_FEATURE_EXPANDER = "expander";
-export const PLUGIN_FEATURE_GATE = "gate";
-export const PLUGIN_FEATURE_LIMITER = "limiter";
-export const PLUGIN_FEATURE_FLANGER = "flanger";
-export const PLUGIN_FEATURE_CHORUS = "chorus";
-export const PLUGIN_FEATURE_DELAY = "delay";
-export const PLUGIN_FEATURE_REVERB = "reverb";
-export const PLUGIN_FEATURE_TREMOLO = "tremolo";
-export const PLUGIN_FEATURE_GLITCH = "glitch";
-export const PLUGIN_FEATURE_UTILITY = "utility";
-export const PLUGIN_FEATURE_PITCH_CORRECTION = "pitch-correction";
-export const PLUGIN_FEATURE_RESTORATION = "restoration";
-export const PLUGIN_FEATURE_MULTI_EFFECTS = "multi-effects";
-export const PLUGIN_FEATURE_MIXING = "mixing";
-export const PLUGIN_FEATURE_MASTERING = "mastering";
-export const PLUGIN_FEATURE_MONO = "mono";
-export const PLUGIN_FEATURE_STEREO = "stereo";
-export const PLUGIN_FEATURE_SURROUND = "surround";
-export const PLUGIN_FEATURE_AMBISONIC = "ambisonic";
 @unmanaged
 export class clap_plugin_descriptor {
   _clap_version_major: u32;
@@ -475,9 +436,6 @@ export class clap_preset_discovery_factory {
 export const AMBISONIC_ORDERING_FUMA = 0;
 export const AMBISONIC_ORDERING_ACN = 1;
 export const AMBISONIC_NORMALIZATION_MAXN = 0;
-export const EXT_AMBISONIC = memory.data<u8>([99, 108, 97, 112, 46, 97, 109, 98, 105, 115, 111, 110, 105, 99, 47, 51, 0]);
-export const EXT_AMBISONIC_COMPAT = memory.data<u8>([99, 108, 97, 112, 46, 97, 109, 98, 105, 115, 111, 110, 105, 99, 46, 100, 114, 97, 102, 116, 47, 51, 0]);
-export const PORT_AMBISONIC = memory.data<u8>([97, 109, 98, 105, 115, 111, 110, 105, 99, 0]);
 @unmanaged
 export class clap_ambisonic_config {
   _ordering: u32;
@@ -492,8 +450,6 @@ export class clap_plugin_ambisonic {
 export class clap_host_ambisonic {
   _changed: usize;
 }
-export const EXT_AUDIO_PORTS_ACTIVATION = memory.data<u8>([99, 108, 97, 112, 46, 97, 117, 100, 105, 111, 45, 112, 111, 114, 116, 115, 45, 97, 99, 116, 105, 118, 97, 116, 105, 111, 110, 47, 50, 0]);
-export const EXT_AUDIO_PORTS_ACTIVATION_COMPAT = memory.data<u8>([99, 108, 97, 112, 46, 97, 117, 100, 105, 111, 45, 112, 111, 114, 116, 115, 45, 97, 99, 116, 105, 118, 97, 116, 105, 111, 110, 47, 100, 114, 97, 102, 116, 45, 50, 0]);
 @unmanaged
 export class clap_plugin_audio_ports_activation {
   _can_activate_while_processing: usize;
@@ -507,9 +463,6 @@ export const AUDIO_PORTS_RESCAN_CHANNEL_COUNT = 1 << 2;
 export const AUDIO_PORTS_RESCAN_PORT_TYPE = 1 << 3;
 export const AUDIO_PORTS_RESCAN_IN_PLACE_PAIR = 1 << 4;
 export const AUDIO_PORTS_RESCAN_LIST = 1 << 5;
-export const EXT_AUDIO_PORTS = memory.data<u8>([99, 108, 97, 112, 46, 97, 117, 100, 105, 111, 45, 112, 111, 114, 116, 115, 0]);
-export const PORT_MONO = memory.data<u8>([109, 111, 110, 111, 0]);
-export const PORT_STEREO = memory.data<u8>([115, 116, 101, 114, 101, 111, 0]);
 @unmanaged
 export class clap_audio_port_info {
   _id: clap_id;
@@ -792,9 +745,6 @@ export class clap_host_audio_ports {
   _is_rescan_flag_supported: usize;
   _rescan: usize;
 }
-export const EXT_AUDIO_PORTS_CONFIG = memory.data<u8>([99, 108, 97, 112, 46, 97, 117, 100, 105, 111, 45, 112, 111, 114, 116, 115, 45, 99, 111, 110, 102, 105, 103, 0]);
-export const EXT_AUDIO_PORTS_CONFIG_INFO = memory.data<u8>([99, 108, 97, 112, 46, 97, 117, 100, 105, 111, 45, 112, 111, 114, 116, 115, 45, 99, 111, 110, 102, 105, 103, 45, 105, 110, 102, 111, 47, 49, 0]);
-export const EXT_AUDIO_PORTS_CONFIG_INFO_COMPAT = memory.data<u8>([99, 108, 97, 112, 46, 97, 117, 100, 105, 111, 45, 112, 111, 114, 116, 115, 45, 99, 111, 110, 102, 105, 103, 45, 105, 110, 102, 111, 47, 100, 114, 97, 102, 116, 45, 48, 0]);
 @unmanaged
 export class clap_audio_ports_config {
   _id: clap_id;
@@ -1086,8 +1036,6 @@ export class clap_plugin_audio_ports_config_info {
 export class clap_host_audio_ports_config {
   _rescan: usize;
 }
-export const EXT_CONFIGURABLE_AUDIO_PORTS = memory.data<u8>([99, 108, 97, 112, 46, 99, 111, 110, 102, 105, 103, 117, 114, 97, 98, 108, 101, 45, 97, 117, 100, 105, 111, 45, 112, 111, 114, 116, 115, 47, 49, 0]);
-export const EXT_CONFIGURABLE_AUDIO_PORTS_COMPAT = memory.data<u8>([99, 108, 97, 112, 46, 99, 111, 110, 102, 105, 103, 117, 114, 97, 98, 108, 101, 45, 97, 117, 100, 105, 111, 45, 112, 111, 114, 116, 115, 46, 100, 114, 97, 102, 116, 49, 0]);
 @unmanaged
 export class clap_audio_port_configuration_request {
   _is_input: bool;
@@ -1104,8 +1052,6 @@ export class clap_plugin_configurable_audio_ports {
 export type clap_context_menu_item_kind_t = u32;
 export const CONTEXT_MENU_TARGET_KIND_GLOBAL = 0;
 export const CONTEXT_MENU_TARGET_KIND_PARAM = 1;
-export const EXT_CONTEXT_MENU = memory.data<u8>([99, 108, 97, 112, 46, 99, 111, 110, 116, 101, 120, 116, 45, 109, 101, 110, 117, 47, 49, 0]);
-export const EXT_CONTEXT_MENU_COMPAT = memory.data<u8>([99, 108, 97, 112, 46, 99, 111, 110, 116, 101, 120, 116, 45, 109, 101, 110, 117, 46, 100, 114, 97, 102, 116, 47, 48, 0]);
 @unmanaged
 export class clap_context_menu_target {
   _kind: u32;
@@ -1152,12 +1098,10 @@ export class clap_host_context_menu {
   _can_popup: usize;
   _popup: usize;
 }
-export const EXT_EVENT_REGISTRY = memory.data<u8>([99, 108, 97, 112, 46, 101, 118, 101, 110, 116, 45, 114, 101, 103, 105, 115, 116, 114, 121, 0]);
 @unmanaged
 export class clap_host_event_registry {
   _query: usize;
 }
-export const EXT_GUI = memory.data<u8>([99, 108, 97, 112, 46, 103, 117, 105, 0]);
 @unmanaged
 export class clap_gui_resize_hints {
   _can_resize_horizontally: bool;
@@ -1192,7 +1136,6 @@ export class clap_host_gui {
   _request_hide: usize;
   _closed: usize;
 }
-export const EXT_LATENCY = memory.data<u8>([99, 108, 97, 112, 46, 108, 97, 116, 101, 110, 99, 121, 0]);
 @unmanaged
 export class clap_plugin_latency {
   _get: usize;
@@ -1209,12 +1152,10 @@ export const LOG_ERROR = 3;
 export const LOG_FATAL = 4;
 export const LOG_HOST_MISBEHAVING = 5;
 export const LOG_PLUGIN_MISBEHAVING = 6;
-export const EXT_LOG = memory.data<u8>([99, 108, 97, 112, 46, 108, 111, 103, 0]);
 @unmanaged
 export class clap_host_log {
   _log: usize;
 }
-export const EXT_NOTE_NAME = memory.data<u8>([99, 108, 97, 112, 46, 110, 111, 116, 101, 45, 110, 97, 109, 101, 0]);
 @unmanaged
 export class clap_note_name {
   @inline
@@ -1499,7 +1440,6 @@ export const NOTE_DIALECT_MIDI = 1 << 1;
 export const NOTE_DIALECT_MIDI_MPE = 1 << 2;
 export const NOTE_PORTS_RESCAN_ALL = 1 << 0;
 export const NOTE_PORTS_RESCAN_NAMES = 1 << 1;
-export const EXT_NOTE_PORTS = memory.data<u8>([99, 108, 97, 112, 46, 110, 111, 116, 101, 45, 112, 111, 114, 116, 115, 0]);
 @unmanaged
 export class clap_note_port_info {
   _id: clap_id;
@@ -1807,7 +1747,6 @@ export const PARAM_RESCAN_ALL = 1 << 3;
 export const PARAM_CLEAR_ALL = 1 << 0;
 export const PARAM_CLEAR_AUTOMATIONS = 1 << 1;
 export const PARAM_CLEAR_MODULATIONS = 1 << 2;
-export const EXT_PARAMS = memory.data<u8>([99, 108, 97, 112, 46, 112, 97, 114, 97, 109, 115, 0]);
 @unmanaged
 export class clap_param_info {
   _id: clap_id;
@@ -3140,8 +3079,6 @@ export const PARAM_INDICATION_AUTOMATION_PRESENT = 1;
 export const PARAM_INDICATION_AUTOMATION_PLAYING = 2;
 export const PARAM_INDICATION_AUTOMATION_RECORDING = 3;
 export const PARAM_INDICATION_AUTOMATION_OVERRIDING = 4;
-export const EXT_PARAM_INDICATION = memory.data<u8>([99, 108, 97, 112, 46, 112, 97, 114, 97, 109, 45, 105, 110, 100, 105, 99, 97, 116, 105, 111, 110, 47, 52, 0]);
-export const EXT_PARAM_INDICATION_COMPAT = memory.data<u8>([99, 108, 97, 112, 46, 112, 97, 114, 97, 109, 45, 105, 110, 100, 105, 99, 97, 116, 105, 111, 110, 46, 100, 114, 97, 102, 116, 47, 52, 0]);
 @unmanaged
 export class clap_plugin_param_indication {
   _set_mapping: usize;
@@ -3151,7 +3088,6 @@ export type clap_posix_fd_flags_t = u32;
 export const POSIX_FD_READ = 1 << 0;
 export const POSIX_FD_WRITE = 1 << 1;
 export const POSIX_FD_ERROR = 1 << 2;
-export const EXT_POSIX_FD_SUPPORT = memory.data<u8>([99, 108, 97, 112, 46, 112, 111, 115, 105, 120, 45, 102, 100, 45, 115, 117, 112, 112, 111, 114, 116, 0]);
 @unmanaged
 export class clap_plugin_posix_fd_support {
   _on_fd: usize;
@@ -3162,8 +3098,6 @@ export class clap_host_posix_fd_support {
   _modify_fd: usize;
   _unregister_fd: usize;
 }
-export const EXT_PRESET_LOAD = memory.data<u8>([99, 108, 97, 112, 46, 112, 114, 101, 115, 101, 116, 45, 108, 111, 97, 100, 47, 50, 0]);
-export const EXT_PRESET_LOAD_COMPAT = memory.data<u8>([99, 108, 97, 112, 46, 112, 114, 101, 115, 101, 116, 45, 108, 111, 97, 100, 46, 100, 114, 97, 102, 116, 47, 50, 0]);
 @unmanaged
 export class clap_plugin_preset_load {
   _from_location: usize;
@@ -3173,8 +3107,6 @@ export class clap_host_preset_load {
   _on_error: usize;
   _loaded: usize;
 }
-export const EXT_REMOTE_CONTROLS = memory.data<u8>([99, 108, 97, 112, 46, 114, 101, 109, 111, 116, 101, 45, 99, 111, 110, 116, 114, 111, 108, 115, 47, 50, 0]);
-export const EXT_REMOTE_CONTROLS_COMPAT = memory.data<u8>([99, 108, 97, 112, 46, 114, 101, 109, 111, 116, 101, 45, 99, 111, 110, 116, 114, 111, 108, 115, 46, 100, 114, 97, 102, 116, 47, 50, 0]);
 @unmanaged
 export class clap_remote_controls_page {
   @inline
@@ -3737,7 +3669,6 @@ export class clap_host_remote_controls {
 export type clap_plugin_render_mode = i32;
 export const RENDER_REALTIME = 0;
 export const RENDER_OFFLINE = 1;
-export const EXT_RENDER = memory.data<u8>([99, 108, 97, 112, 46, 114, 101, 110, 100, 101, 114, 0]);
 @unmanaged
 export class clap_plugin_render {
   _has_hard_realtime_requirement: usize;
@@ -3756,13 +3687,11 @@ export class clap_ostream {
 export const STATE_CONTEXT_FOR_PRESET = 1;
 export const STATE_CONTEXT_FOR_DUPLICATE = 2;
 export const STATE_CONTEXT_FOR_PROJECT = 3;
-export const EXT_STATE_CONTEXT = memory.data<u8>([99, 108, 97, 112, 46, 115, 116, 97, 116, 101, 45, 99, 111, 110, 116, 101, 120, 116, 47, 50, 0]);
 @unmanaged
 export class clap_plugin_state_context {
   _save: usize;
   _load: usize;
 }
-export const EXT_STATE = memory.data<u8>([99, 108, 97, 112, 46, 115, 116, 97, 116, 101, 0]);
 @unmanaged
 export class clap_plugin_state {
   _save: usize;
@@ -3792,9 +3721,6 @@ export const SURROUND_TBC = 16;
 export const SURROUND_TBR = 17;
 export const SURROUND_TSL = 18;
 export const SURROUND_TSR = 19;
-export const EXT_SURROUND = memory.data<u8>([99, 108, 97, 112, 46, 115, 117, 114, 114, 111, 117, 110, 100, 47, 52, 0]);
-export const EXT_SURROUND_COMPAT = memory.data<u8>([99, 108, 97, 112, 46, 115, 117, 114, 114, 111, 117, 110, 100, 46, 100, 114, 97, 102, 116, 47, 52, 0]);
-export const PORT_SURROUND = memory.data<u8>([115, 117, 114, 114, 111, 117, 110, 100, 0]);
 @unmanaged
 export class clap_plugin_surround {
   _is_channel_mask_supported: usize;
@@ -3804,7 +3730,6 @@ export class clap_plugin_surround {
 export class clap_host_surround {
   _changed: usize;
 }
-export const EXT_TAIL = memory.data<u8>([99, 108, 97, 112, 46, 116, 97, 105, 108, 0]);
 @unmanaged
 export class clap_plugin_tail {
   _get: usize;
@@ -3813,13 +3738,11 @@ export class clap_plugin_tail {
 export class clap_host_tail {
   _changed: usize;
 }
-export const EXT_THREAD_CHECK = memory.data<u8>([99, 108, 97, 112, 46, 116, 104, 114, 101, 97, 100, 45, 99, 104, 101, 99, 107, 0]);
 @unmanaged
 export class clap_host_thread_check {
   _is_main_thread: usize;
   _is_audio_thread: usize;
 }
-export const EXT_THREAD_POOL = memory.data<u8>([99, 108, 97, 112, 46, 116, 104, 114, 101, 97, 100, 45, 112, 111, 111, 108, 0]);
 @unmanaged
 export class clap_plugin_thread_pool {
   _exec: usize;
@@ -3828,7 +3751,6 @@ export class clap_plugin_thread_pool {
 export class clap_host_thread_pool {
   _request_exec: usize;
 }
-export const EXT_TIMER_SUPPORT = memory.data<u8>([99, 108, 97, 112, 46, 116, 105, 109, 101, 114, 45, 115, 117, 112, 112, 111, 114, 116, 0]);
 @unmanaged
 export class clap_plugin_timer_support {
   _on_timer: usize;
@@ -3838,8 +3760,6 @@ export class clap_host_timer_support {
   _register_timer: usize;
   _unregister_timer: usize;
 }
-export const EXT_TRACK_INFO = memory.data<u8>([99, 108, 97, 112, 46, 116, 114, 97, 99, 107, 45, 105, 110, 102, 111, 47, 49, 0]);
-export const EXT_TRACK_INFO_COMPAT = memory.data<u8>([99, 108, 97, 112, 46, 116, 114, 97, 99, 107, 45, 105, 110, 102, 111, 46, 100, 114, 97, 102, 116, 47, 49, 0]);
 @unmanaged
 export class clap_track_info {
   _flags: u64;
@@ -4127,7 +4047,6 @@ export class clap_host_track_info {
   _get: usize;
 }
 export const VOICE_INFO_SUPPORTS_OVERLAPPING_NOTES = 1 << 0;
-export const EXT_VOICE_INFO = memory.data<u8>([99, 108, 97, 112, 46, 118, 111, 105, 99, 101, 45, 105, 110, 102, 111, 0]);
 @unmanaged
 export class clap_voice_info {
   _voice_count: u32;
@@ -4154,7 +4073,6 @@ export class clap_plugin_invalidation_factory {
   _get: usize;
   _refresh: usize;
 }
-export const PLUGIN_STATE_CONVERTER_FACTORY_ID = memory.data<u8>([99, 108, 97, 112, 46, 112, 108, 117, 103, 105, 110, 45, 115, 116, 97, 116, 101, 45, 99, 111, 110, 118, 101, 114, 116, 101, 114, 45, 102, 97, 99, 116, 111, 114, 121, 47, 49, 0]);
 @unmanaged
 export class clap_plugin_state_converter_descriptor {
   _clap_version_major: u32;
@@ -4197,13 +4115,11 @@ export class clap_plugin_state_converter_factory {
   _get_descriptor: usize;
   _create: usize;
 }
-export const EXT_EXTENSIBLE_AUDIO_PORTS = memory.data<u8>([99, 108, 97, 112, 46, 101, 120, 116, 101, 110, 115, 105, 98, 108, 101, 45, 97, 117, 100, 105, 111, 45, 112, 111, 114, 116, 115, 47, 49, 0]);
 @unmanaged
 export class clap_plugin_extensible_audio_ports {
   _add_port: usize;
   _remove_port: usize;
 }
-export const EXT_GAIN_ADJUSTMENT_METERING = memory.data<u8>([99, 108, 97, 112, 46, 103, 97, 105, 110, 45, 97, 100, 106, 117, 115, 116, 109, 101, 110, 116, 45, 109, 101, 116, 101, 114, 105, 110, 103, 47, 48, 0]);
 @unmanaged
 export class clap_plugin_gain_adjustment_metering {
   _get: usize;
@@ -4216,7 +4132,6 @@ export const MINI_CURVE_DISPLAY_CURVE_KIND_GAIN_REDUCTION = 4;
 export const MINI_CURVE_DISPLAY_CURVE_KIND_TIME_SERIES = 5;
 export const MINI_CURVE_DISPLAY_CURVE_CHANGED = 1 << 0;
 export const MINI_CURVE_DISPLAY_AXIS_NAME_CHANGED = 1 << 1;
-export const EXT_MINI_CURVE_DISPLAY = memory.data<u8>([99, 108, 97, 112, 46, 109, 105, 110, 105, 45, 99, 117, 114, 118, 101, 45, 100, 105, 115, 112, 108, 97, 121, 47, 51, 0]);
 @unmanaged
 export class clap_mini_curve_display_curve_hints {
   _x_min: f64;
@@ -4255,7 +4170,6 @@ export const PROJECT_LOCATION_RETURN_TRACK = 4;
 export const PROJECT_LOCATION_MASTER_TRACK = 5;
 export const PROJECT_LOCATION_HAS_INDEX = 1 << 0;
 export const PROJECT_LOCATION_HAS_COLOR = 1 << 1;
-export const EXT_PROJECT_LOCATION = memory.data<u8>([99, 108, 97, 112, 46, 112, 114, 111, 106, 101, 99, 116, 45, 108, 111, 99, 97, 116, 105, 111, 110, 47, 50, 0]);
 @unmanaged
 export class clap_project_location_element {
   _flags: u64;
@@ -5571,7 +5485,6 @@ export class clap_project_location_element {
 export class clap_plugin_project_location {
   _set: usize;
 }
-export const EXT_RESOURCE_DIRECTORY = memory.data<u8>([99, 108, 97, 112, 46, 114, 101, 115, 111, 117, 114, 99, 101, 45, 100, 105, 114, 101, 99, 116, 111, 114, 121, 47, 49, 0]);
 @unmanaged
 export class clap_plugin_resource_directory {
   _set_directory: usize;
@@ -5584,13 +5497,11 @@ export class clap_host_resource_directory {
   _request_directory: usize;
   _release_directory: usize;
 }
-export const EXT_SCRATCH_MEMORY = memory.data<u8>([99, 108, 97, 112, 46, 115, 99, 114, 97, 116, 99, 104, 45, 109, 101, 109, 111, 114, 121, 47, 49, 0]);
 @unmanaged
 export class clap_host_scratch_memory {
   _reserve: usize;
   _access: usize;
 }
-export const EXT_TRANSPORT_CONTROL = memory.data<u8>([99, 108, 97, 112, 46, 116, 114, 97, 110, 115, 112, 111, 114, 116, 45, 99, 111, 110, 116, 114, 111, 108, 47, 49, 0]);
 @unmanaged
 export class clap_host_transport_control {
   _request_start: usize;
@@ -5617,7 +5528,6 @@ export const TRIGGER_RESCAN_INFO = 1 << 0;
 export const TRIGGER_RESCAN_ALL = 1 << 1;
 export const TRIGGER_CLEAR_ALL = 1 << 0;
 export const TRIGGER_CLEAR_AUTOMATIONS = 1 << 1;
-export const EXT_TRIGGERS = memory.data<u8>([99, 108, 97, 112, 46, 116, 114, 105, 103, 103, 101, 114, 115, 47, 49, 0]);
 @unmanaged
 export class clap_event_trigger {
   _header_size: u32;
@@ -6948,7 +6858,6 @@ export class clap_host_triggers {
   _rescan: usize;
   _clear: usize;
 }
-export const EXT_TUNING = memory.data<u8>([99, 108, 97, 112, 46, 116, 117, 110, 105, 110, 103, 47, 50, 0]);
 @unmanaged
 export class clap_event_tuning {
   _header_size: u32;
@@ -7244,9 +7153,6 @@ export class clap_host_tuning {
   _get_tuning_count: usize;
   _get_info: usize;
 }
-export const EXT_UNDO = memory.data<u8>([99, 108, 97, 112, 46, 117, 110, 100, 111, 47, 52, 0]);
-export const EXT_UNDO_CONTEXT = memory.data<u8>([99, 108, 97, 112, 46, 117, 110, 100, 111, 95, 99, 111, 110, 116, 101, 120, 116, 47, 52, 0]);
-export const EXT_UNDO_DELTA = memory.data<u8>([99, 108, 97, 112, 46, 117, 110, 100, 111, 95, 100, 101, 108, 116, 97, 47, 52, 0]);
 @unmanaged
 export class clap_undo_delta_properties {
   _has_delta: bool;
@@ -7276,7 +7182,6 @@ export class clap_host_undo {
   _request_redo: usize;
   _set_wants_context_updates: usize;
 }
-export const EXT_WEBVIEW = memory.data<u8>([99, 108, 97, 112, 46, 119, 101, 98, 118, 105, 101, 119, 47, 51, 0]);
 @unmanaged
 export class clap_plugin_webview {
   _get_uri: usize;
@@ -7286,4 +7191,677 @@ export class clap_plugin_webview {
 @unmanaged
 export class clap_host_webview {
   _send: usize;
+}
+@unmanaged
+@final
+export class Strings {
+  static get PLUGIN_FEATURE_INSTRUMENT(): string {
+    return "instrument";
+  }
+  static get PLUGIN_FEATURE_AUDIO_EFFECT(): string {
+    return "audio-effect";
+  }
+  static get PLUGIN_FEATURE_NOTE_EFFECT(): string {
+    return "note-effect";
+  }
+  static get PLUGIN_FEATURE_NOTE_DETECTOR(): string {
+    return "note-detector";
+  }
+  static get PLUGIN_FEATURE_ANALYZER(): string {
+    return "analyzer";
+  }
+  static get PLUGIN_FEATURE_SYNTHESIZER(): string {
+    return "synthesizer";
+  }
+  static get PLUGIN_FEATURE_SAMPLER(): string {
+    return "sampler";
+  }
+  static get PLUGIN_FEATURE_DRUM(): string {
+    return "drum";
+  }
+  static get PLUGIN_FEATURE_DRUM_MACHINE(): string {
+    return "drum-machine";
+  }
+  static get PLUGIN_FEATURE_FILTER(): string {
+    return "filter";
+  }
+  static get PLUGIN_FEATURE_PHASER(): string {
+    return "phaser";
+  }
+  static get PLUGIN_FEATURE_EQUALIZER(): string {
+    return "equalizer";
+  }
+  static get PLUGIN_FEATURE_DEESSER(): string {
+    return "de-esser";
+  }
+  static get PLUGIN_FEATURE_PHASE_VOCODER(): string {
+    return "phase-vocoder";
+  }
+  static get PLUGIN_FEATURE_GRANULAR(): string {
+    return "granular";
+  }
+  static get PLUGIN_FEATURE_FREQUENCY_SHIFTER(): string {
+    return "frequency-shifter";
+  }
+  static get PLUGIN_FEATURE_PITCH_SHIFTER(): string {
+    return "pitch-shifter";
+  }
+  static get PLUGIN_FEATURE_DISTORTION(): string {
+    return "distortion";
+  }
+  static get PLUGIN_FEATURE_TRANSIENT_SHAPER(): string {
+    return "transient-shaper";
+  }
+  static get PLUGIN_FEATURE_COMPRESSOR(): string {
+    return "compressor";
+  }
+  static get PLUGIN_FEATURE_EXPANDER(): string {
+    return "expander";
+  }
+  static get PLUGIN_FEATURE_GATE(): string {
+    return "gate";
+  }
+  static get PLUGIN_FEATURE_LIMITER(): string {
+    return "limiter";
+  }
+  static get PLUGIN_FEATURE_FLANGER(): string {
+    return "flanger";
+  }
+  static get PLUGIN_FEATURE_CHORUS(): string {
+    return "chorus";
+  }
+  static get PLUGIN_FEATURE_DELAY(): string {
+    return "delay";
+  }
+  static get PLUGIN_FEATURE_REVERB(): string {
+    return "reverb";
+  }
+  static get PLUGIN_FEATURE_TREMOLO(): string {
+    return "tremolo";
+  }
+  static get PLUGIN_FEATURE_GLITCH(): string {
+    return "glitch";
+  }
+  static get PLUGIN_FEATURE_UTILITY(): string {
+    return "utility";
+  }
+  static get PLUGIN_FEATURE_PITCH_CORRECTION(): string {
+    return "pitch-correction";
+  }
+  static get PLUGIN_FEATURE_RESTORATION(): string {
+    return "restoration";
+  }
+  static get PLUGIN_FEATURE_MULTI_EFFECTS(): string {
+    return "multi-effects";
+  }
+  static get PLUGIN_FEATURE_MIXING(): string {
+    return "mixing";
+  }
+  static get PLUGIN_FEATURE_MASTERING(): string {
+    return "mastering";
+  }
+  static get PLUGIN_FEATURE_MONO(): string {
+    return "mono";
+  }
+  static get PLUGIN_FEATURE_STEREO(): string {
+    return "stereo";
+  }
+  static get PLUGIN_FEATURE_SURROUND(): string {
+    return "surround";
+  }
+  static get PLUGIN_FEATURE_AMBISONIC(): string {
+    return "ambisonic";
+  }
+  static get EXT_AMBISONIC(): string {
+    return "clap.ambisonic/3";
+  }
+  static get EXT_AMBISONIC_COMPAT(): string {
+    return "clap.ambisonic.draft/3";
+  }
+  static get PORT_AMBISONIC(): string {
+    return "ambisonic";
+  }
+  static get EXT_AUDIO_PORTS_ACTIVATION(): string {
+    return "clap.audio-ports-activation/2";
+  }
+  static get EXT_AUDIO_PORTS_ACTIVATION_COMPAT(): string {
+    return "clap.audio-ports-activation/draft-2";
+  }
+  static get EXT_AUDIO_PORTS(): string {
+    return "clap.audio-ports";
+  }
+  static get PORT_MONO(): string {
+    return "mono";
+  }
+  static get PORT_STEREO(): string {
+    return "stereo";
+  }
+  static get EXT_AUDIO_PORTS_CONFIG(): string {
+    return "clap.audio-ports-config";
+  }
+  static get EXT_AUDIO_PORTS_CONFIG_INFO(): string {
+    return "clap.audio-ports-config-info/1";
+  }
+  static get EXT_AUDIO_PORTS_CONFIG_INFO_COMPAT(): string {
+    return "clap.audio-ports-config-info/draft-0";
+  }
+  static get EXT_CONFIGURABLE_AUDIO_PORTS(): string {
+    return "clap.configurable-audio-ports/1";
+  }
+  static get EXT_CONFIGURABLE_AUDIO_PORTS_COMPAT(): string {
+    return "clap.configurable-audio-ports.draft1";
+  }
+  static get EXT_CONTEXT_MENU(): string {
+    return "clap.context-menu/1";
+  }
+  static get EXT_CONTEXT_MENU_COMPAT(): string {
+    return "clap.context-menu.draft/0";
+  }
+  static get EXT_EVENT_REGISTRY(): string {
+    return "clap.event-registry";
+  }
+  static get EXT_GUI(): string {
+    return "clap.gui";
+  }
+  static get EXT_LATENCY(): string {
+    return "clap.latency";
+  }
+  static get EXT_LOG(): string {
+    return "clap.log";
+  }
+  static get EXT_NOTE_NAME(): string {
+    return "clap.note-name";
+  }
+  static get EXT_NOTE_PORTS(): string {
+    return "clap.note-ports";
+  }
+  static get EXT_PARAMS(): string {
+    return "clap.params";
+  }
+  static get EXT_PARAM_INDICATION(): string {
+    return "clap.param-indication/4";
+  }
+  static get EXT_PARAM_INDICATION_COMPAT(): string {
+    return "clap.param-indication.draft/4";
+  }
+  static get EXT_POSIX_FD_SUPPORT(): string {
+    return "clap.posix-fd-support";
+  }
+  static get EXT_PRESET_LOAD(): string {
+    return "clap.preset-load/2";
+  }
+  static get EXT_PRESET_LOAD_COMPAT(): string {
+    return "clap.preset-load.draft/2";
+  }
+  static get EXT_REMOTE_CONTROLS(): string {
+    return "clap.remote-controls/2";
+  }
+  static get EXT_REMOTE_CONTROLS_COMPAT(): string {
+    return "clap.remote-controls.draft/2";
+  }
+  static get EXT_RENDER(): string {
+    return "clap.render";
+  }
+  static get EXT_STATE_CONTEXT(): string {
+    return "clap.state-context/2";
+  }
+  static get EXT_STATE(): string {
+    return "clap.state";
+  }
+  static get EXT_SURROUND(): string {
+    return "clap.surround/4";
+  }
+  static get EXT_SURROUND_COMPAT(): string {
+    return "clap.surround.draft/4";
+  }
+  static get PORT_SURROUND(): string {
+    return "surround";
+  }
+  static get EXT_TAIL(): string {
+    return "clap.tail";
+  }
+  static get EXT_THREAD_CHECK(): string {
+    return "clap.thread-check";
+  }
+  static get EXT_THREAD_POOL(): string {
+    return "clap.thread-pool";
+  }
+  static get EXT_TIMER_SUPPORT(): string {
+    return "clap.timer-support";
+  }
+  static get EXT_TRACK_INFO(): string {
+    return "clap.track-info/1";
+  }
+  static get EXT_TRACK_INFO_COMPAT(): string {
+    return "clap.track-info.draft/1";
+  }
+  static get EXT_VOICE_INFO(): string {
+    return "clap.voice-info";
+  }
+  static get PLUGIN_STATE_CONVERTER_FACTORY_ID(): string {
+    return "clap.plugin-state-converter-factory/1";
+  }
+  static get EXT_EXTENSIBLE_AUDIO_PORTS(): string {
+    return "clap.extensible-audio-ports/1";
+  }
+  static get EXT_GAIN_ADJUSTMENT_METERING(): string {
+    return "clap.gain-adjustment-metering/0";
+  }
+  static get EXT_MINI_CURVE_DISPLAY(): string {
+    return "clap.mini-curve-display/3";
+  }
+  static get EXT_PROJECT_LOCATION(): string {
+    return "clap.project-location/2";
+  }
+  static get EXT_RESOURCE_DIRECTORY(): string {
+    return "clap.resource-directory/1";
+  }
+  static get EXT_SCRATCH_MEMORY(): string {
+    return "clap.scratch-memory/1";
+  }
+  static get EXT_TRANSPORT_CONTROL(): string {
+    return "clap.transport-control/1";
+  }
+  static get EXT_TRIGGERS(): string {
+    return "clap.triggers/1";
+  }
+  static get EXT_TUNING(): string {
+    return "clap.tuning/2";
+  }
+  static get EXT_UNDO(): string {
+    return "clap.undo/4";
+  }
+  static get EXT_UNDO_CONTEXT(): string {
+    return "clap.undo_context/4";
+  }
+  static get EXT_UNDO_DELTA(): string {
+    return "clap.undo_delta/4";
+  }
+  static get EXT_WEBVIEW(): string {
+    return "clap.webview/3";
+  }
+}
+@unmanaged
+@final
+export class Utf8 {
+  @inline
+  static get PLUGIN_FEATURE_INSTRUMENT(): usize {
+    return memory.data<u8>([105, 110, 115, 116, 114, 117, 109, 101, 110, 116, 0]);
+  }
+  @inline
+  static get PLUGIN_FEATURE_AUDIO_EFFECT(): usize {
+    return memory.data<u8>([97, 117, 100, 105, 111, 45, 101, 102, 102, 101, 99, 116, 0]);
+  }
+  @inline
+  static get PLUGIN_FEATURE_NOTE_EFFECT(): usize {
+    return memory.data<u8>([110, 111, 116, 101, 45, 101, 102, 102, 101, 99, 116, 0]);
+  }
+  @inline
+  static get PLUGIN_FEATURE_NOTE_DETECTOR(): usize {
+    return memory.data<u8>([110, 111, 116, 101, 45, 100, 101, 116, 101, 99, 116, 111, 114, 0]);
+  }
+  @inline
+  static get PLUGIN_FEATURE_ANALYZER(): usize {
+    return memory.data<u8>([97, 110, 97, 108, 121, 122, 101, 114, 0]);
+  }
+  @inline
+  static get PLUGIN_FEATURE_SYNTHESIZER(): usize {
+    return memory.data<u8>([115, 121, 110, 116, 104, 101, 115, 105, 122, 101, 114, 0]);
+  }
+  @inline
+  static get PLUGIN_FEATURE_SAMPLER(): usize {
+    return memory.data<u8>([115, 97, 109, 112, 108, 101, 114, 0]);
+  }
+  @inline
+  static get PLUGIN_FEATURE_DRUM(): usize {
+    return memory.data<u8>([100, 114, 117, 109, 0]);
+  }
+  @inline
+  static get PLUGIN_FEATURE_DRUM_MACHINE(): usize {
+    return memory.data<u8>([100, 114, 117, 109, 45, 109, 97, 99, 104, 105, 110, 101, 0]);
+  }
+  @inline
+  static get PLUGIN_FEATURE_FILTER(): usize {
+    return memory.data<u8>([102, 105, 108, 116, 101, 114, 0]);
+  }
+  @inline
+  static get PLUGIN_FEATURE_PHASER(): usize {
+    return memory.data<u8>([112, 104, 97, 115, 101, 114, 0]);
+  }
+  @inline
+  static get PLUGIN_FEATURE_EQUALIZER(): usize {
+    return memory.data<u8>([101, 113, 117, 97, 108, 105, 122, 101, 114, 0]);
+  }
+  @inline
+  static get PLUGIN_FEATURE_DEESSER(): usize {
+    return memory.data<u8>([100, 101, 45, 101, 115, 115, 101, 114, 0]);
+  }
+  @inline
+  static get PLUGIN_FEATURE_PHASE_VOCODER(): usize {
+    return memory.data<u8>([112, 104, 97, 115, 101, 45, 118, 111, 99, 111, 100, 101, 114, 0]);
+  }
+  @inline
+  static get PLUGIN_FEATURE_GRANULAR(): usize {
+    return memory.data<u8>([103, 114, 97, 110, 117, 108, 97, 114, 0]);
+  }
+  @inline
+  static get PLUGIN_FEATURE_FREQUENCY_SHIFTER(): usize {
+    return memory.data<u8>([102, 114, 101, 113, 117, 101, 110, 99, 121, 45, 115, 104, 105, 102, 116, 101, 114, 0]);
+  }
+  @inline
+  static get PLUGIN_FEATURE_PITCH_SHIFTER(): usize {
+    return memory.data<u8>([112, 105, 116, 99, 104, 45, 115, 104, 105, 102, 116, 101, 114, 0]);
+  }
+  @inline
+  static get PLUGIN_FEATURE_DISTORTION(): usize {
+    return memory.data<u8>([100, 105, 115, 116, 111, 114, 116, 105, 111, 110, 0]);
+  }
+  @inline
+  static get PLUGIN_FEATURE_TRANSIENT_SHAPER(): usize {
+    return memory.data<u8>([116, 114, 97, 110, 115, 105, 101, 110, 116, 45, 115, 104, 97, 112, 101, 114, 0]);
+  }
+  @inline
+  static get PLUGIN_FEATURE_COMPRESSOR(): usize {
+    return memory.data<u8>([99, 111, 109, 112, 114, 101, 115, 115, 111, 114, 0]);
+  }
+  @inline
+  static get PLUGIN_FEATURE_EXPANDER(): usize {
+    return memory.data<u8>([101, 120, 112, 97, 110, 100, 101, 114, 0]);
+  }
+  @inline
+  static get PLUGIN_FEATURE_GATE(): usize {
+    return memory.data<u8>([103, 97, 116, 101, 0]);
+  }
+  @inline
+  static get PLUGIN_FEATURE_LIMITER(): usize {
+    return memory.data<u8>([108, 105, 109, 105, 116, 101, 114, 0]);
+  }
+  @inline
+  static get PLUGIN_FEATURE_FLANGER(): usize {
+    return memory.data<u8>([102, 108, 97, 110, 103, 101, 114, 0]);
+  }
+  @inline
+  static get PLUGIN_FEATURE_CHORUS(): usize {
+    return memory.data<u8>([99, 104, 111, 114, 117, 115, 0]);
+  }
+  @inline
+  static get PLUGIN_FEATURE_DELAY(): usize {
+    return memory.data<u8>([100, 101, 108, 97, 121, 0]);
+  }
+  @inline
+  static get PLUGIN_FEATURE_REVERB(): usize {
+    return memory.data<u8>([114, 101, 118, 101, 114, 98, 0]);
+  }
+  @inline
+  static get PLUGIN_FEATURE_TREMOLO(): usize {
+    return memory.data<u8>([116, 114, 101, 109, 111, 108, 111, 0]);
+  }
+  @inline
+  static get PLUGIN_FEATURE_GLITCH(): usize {
+    return memory.data<u8>([103, 108, 105, 116, 99, 104, 0]);
+  }
+  @inline
+  static get PLUGIN_FEATURE_UTILITY(): usize {
+    return memory.data<u8>([117, 116, 105, 108, 105, 116, 121, 0]);
+  }
+  @inline
+  static get PLUGIN_FEATURE_PITCH_CORRECTION(): usize {
+    return memory.data<u8>([112, 105, 116, 99, 104, 45, 99, 111, 114, 114, 101, 99, 116, 105, 111, 110, 0]);
+  }
+  @inline
+  static get PLUGIN_FEATURE_RESTORATION(): usize {
+    return memory.data<u8>([114, 101, 115, 116, 111, 114, 97, 116, 105, 111, 110, 0]);
+  }
+  @inline
+  static get PLUGIN_FEATURE_MULTI_EFFECTS(): usize {
+    return memory.data<u8>([109, 117, 108, 116, 105, 45, 101, 102, 102, 101, 99, 116, 115, 0]);
+  }
+  @inline
+  static get PLUGIN_FEATURE_MIXING(): usize {
+    return memory.data<u8>([109, 105, 120, 105, 110, 103, 0]);
+  }
+  @inline
+  static get PLUGIN_FEATURE_MASTERING(): usize {
+    return memory.data<u8>([109, 97, 115, 116, 101, 114, 105, 110, 103, 0]);
+  }
+  @inline
+  static get PLUGIN_FEATURE_MONO(): usize {
+    return memory.data<u8>([109, 111, 110, 111, 0]);
+  }
+  @inline
+  static get PLUGIN_FEATURE_STEREO(): usize {
+    return memory.data<u8>([115, 116, 101, 114, 101, 111, 0]);
+  }
+  @inline
+  static get PLUGIN_FEATURE_SURROUND(): usize {
+    return memory.data<u8>([115, 117, 114, 114, 111, 117, 110, 100, 0]);
+  }
+  @inline
+  static get PLUGIN_FEATURE_AMBISONIC(): usize {
+    return memory.data<u8>([97, 109, 98, 105, 115, 111, 110, 105, 99, 0]);
+  }
+  @inline
+  static get EXT_AMBISONIC(): usize {
+    return memory.data<u8>([99, 108, 97, 112, 46, 97, 109, 98, 105, 115, 111, 110, 105, 99, 47, 51, 0]);
+  }
+  @inline
+  static get EXT_AMBISONIC_COMPAT(): usize {
+    return memory.data<u8>([99, 108, 97, 112, 46, 97, 109, 98, 105, 115, 111, 110, 105, 99, 46, 100, 114, 97, 102, 116, 47, 51, 0]);
+  }
+  @inline
+  static get PORT_AMBISONIC(): usize {
+    return memory.data<u8>([97, 109, 98, 105, 115, 111, 110, 105, 99, 0]);
+  }
+  @inline
+  static get EXT_AUDIO_PORTS_ACTIVATION(): usize {
+    return memory.data<u8>([99, 108, 97, 112, 46, 97, 117, 100, 105, 111, 45, 112, 111, 114, 116, 115, 45, 97, 99, 116, 105, 118, 97, 116, 105, 111, 110, 47, 50, 0]);
+  }
+  @inline
+  static get EXT_AUDIO_PORTS_ACTIVATION_COMPAT(): usize {
+    return memory.data<u8>([99, 108, 97, 112, 46, 97, 117, 100, 105, 111, 45, 112, 111, 114, 116, 115, 45, 97, 99, 116, 105, 118, 97, 116, 105, 111, 110, 47, 100, 114, 97, 102, 116, 45, 50, 0]);
+  }
+  @inline
+  static get EXT_AUDIO_PORTS(): usize {
+    return memory.data<u8>([99, 108, 97, 112, 46, 97, 117, 100, 105, 111, 45, 112, 111, 114, 116, 115, 0]);
+  }
+  @inline
+  static get PORT_MONO(): usize {
+    return memory.data<u8>([109, 111, 110, 111, 0]);
+  }
+  @inline
+  static get PORT_STEREO(): usize {
+    return memory.data<u8>([115, 116, 101, 114, 101, 111, 0]);
+  }
+  @inline
+  static get EXT_AUDIO_PORTS_CONFIG(): usize {
+    return memory.data<u8>([99, 108, 97, 112, 46, 97, 117, 100, 105, 111, 45, 112, 111, 114, 116, 115, 45, 99, 111, 110, 102, 105, 103, 0]);
+  }
+  @inline
+  static get EXT_AUDIO_PORTS_CONFIG_INFO(): usize {
+    return memory.data<u8>([99, 108, 97, 112, 46, 97, 117, 100, 105, 111, 45, 112, 111, 114, 116, 115, 45, 99, 111, 110, 102, 105, 103, 45, 105, 110, 102, 111, 47, 49, 0]);
+  }
+  @inline
+  static get EXT_AUDIO_PORTS_CONFIG_INFO_COMPAT(): usize {
+    return memory.data<u8>([99, 108, 97, 112, 46, 97, 117, 100, 105, 111, 45, 112, 111, 114, 116, 115, 45, 99, 111, 110, 102, 105, 103, 45, 105, 110, 102, 111, 47, 100, 114, 97, 102, 116, 45, 48, 0]);
+  }
+  @inline
+  static get EXT_CONFIGURABLE_AUDIO_PORTS(): usize {
+    return memory.data<u8>([99, 108, 97, 112, 46, 99, 111, 110, 102, 105, 103, 117, 114, 97, 98, 108, 101, 45, 97, 117, 100, 105, 111, 45, 112, 111, 114, 116, 115, 47, 49, 0]);
+  }
+  @inline
+  static get EXT_CONFIGURABLE_AUDIO_PORTS_COMPAT(): usize {
+    return memory.data<u8>([99, 108, 97, 112, 46, 99, 111, 110, 102, 105, 103, 117, 114, 97, 98, 108, 101, 45, 97, 117, 100, 105, 111, 45, 112, 111, 114, 116, 115, 46, 100, 114, 97, 102, 116, 49, 0]);
+  }
+  @inline
+  static get EXT_CONTEXT_MENU(): usize {
+    return memory.data<u8>([99, 108, 97, 112, 46, 99, 111, 110, 116, 101, 120, 116, 45, 109, 101, 110, 117, 47, 49, 0]);
+  }
+  @inline
+  static get EXT_CONTEXT_MENU_COMPAT(): usize {
+    return memory.data<u8>([99, 108, 97, 112, 46, 99, 111, 110, 116, 101, 120, 116, 45, 109, 101, 110, 117, 46, 100, 114, 97, 102, 116, 47, 48, 0]);
+  }
+  @inline
+  static get EXT_EVENT_REGISTRY(): usize {
+    return memory.data<u8>([99, 108, 97, 112, 46, 101, 118, 101, 110, 116, 45, 114, 101, 103, 105, 115, 116, 114, 121, 0]);
+  }
+  @inline
+  static get EXT_GUI(): usize {
+    return memory.data<u8>([99, 108, 97, 112, 46, 103, 117, 105, 0]);
+  }
+  @inline
+  static get EXT_LATENCY(): usize {
+    return memory.data<u8>([99, 108, 97, 112, 46, 108, 97, 116, 101, 110, 99, 121, 0]);
+  }
+  @inline
+  static get EXT_LOG(): usize {
+    return memory.data<u8>([99, 108, 97, 112, 46, 108, 111, 103, 0]);
+  }
+  @inline
+  static get EXT_NOTE_NAME(): usize {
+    return memory.data<u8>([99, 108, 97, 112, 46, 110, 111, 116, 101, 45, 110, 97, 109, 101, 0]);
+  }
+  @inline
+  static get EXT_NOTE_PORTS(): usize {
+    return memory.data<u8>([99, 108, 97, 112, 46, 110, 111, 116, 101, 45, 112, 111, 114, 116, 115, 0]);
+  }
+  @inline
+  static get EXT_PARAMS(): usize {
+    return memory.data<u8>([99, 108, 97, 112, 46, 112, 97, 114, 97, 109, 115, 0]);
+  }
+  @inline
+  static get EXT_PARAM_INDICATION(): usize {
+    return memory.data<u8>([99, 108, 97, 112, 46, 112, 97, 114, 97, 109, 45, 105, 110, 100, 105, 99, 97, 116, 105, 111, 110, 47, 52, 0]);
+  }
+  @inline
+  static get EXT_PARAM_INDICATION_COMPAT(): usize {
+    return memory.data<u8>([99, 108, 97, 112, 46, 112, 97, 114, 97, 109, 45, 105, 110, 100, 105, 99, 97, 116, 105, 111, 110, 46, 100, 114, 97, 102, 116, 47, 52, 0]);
+  }
+  @inline
+  static get EXT_POSIX_FD_SUPPORT(): usize {
+    return memory.data<u8>([99, 108, 97, 112, 46, 112, 111, 115, 105, 120, 45, 102, 100, 45, 115, 117, 112, 112, 111, 114, 116, 0]);
+  }
+  @inline
+  static get EXT_PRESET_LOAD(): usize {
+    return memory.data<u8>([99, 108, 97, 112, 46, 112, 114, 101, 115, 101, 116, 45, 108, 111, 97, 100, 47, 50, 0]);
+  }
+  @inline
+  static get EXT_PRESET_LOAD_COMPAT(): usize {
+    return memory.data<u8>([99, 108, 97, 112, 46, 112, 114, 101, 115, 101, 116, 45, 108, 111, 97, 100, 46, 100, 114, 97, 102, 116, 47, 50, 0]);
+  }
+  @inline
+  static get EXT_REMOTE_CONTROLS(): usize {
+    return memory.data<u8>([99, 108, 97, 112, 46, 114, 101, 109, 111, 116, 101, 45, 99, 111, 110, 116, 114, 111, 108, 115, 47, 50, 0]);
+  }
+  @inline
+  static get EXT_REMOTE_CONTROLS_COMPAT(): usize {
+    return memory.data<u8>([99, 108, 97, 112, 46, 114, 101, 109, 111, 116, 101, 45, 99, 111, 110, 116, 114, 111, 108, 115, 46, 100, 114, 97, 102, 116, 47, 50, 0]);
+  }
+  @inline
+  static get EXT_RENDER(): usize {
+    return memory.data<u8>([99, 108, 97, 112, 46, 114, 101, 110, 100, 101, 114, 0]);
+  }
+  @inline
+  static get EXT_STATE_CONTEXT(): usize {
+    return memory.data<u8>([99, 108, 97, 112, 46, 115, 116, 97, 116, 101, 45, 99, 111, 110, 116, 101, 120, 116, 47, 50, 0]);
+  }
+  @inline
+  static get EXT_STATE(): usize {
+    return memory.data<u8>([99, 108, 97, 112, 46, 115, 116, 97, 116, 101, 0]);
+  }
+  @inline
+  static get EXT_SURROUND(): usize {
+    return memory.data<u8>([99, 108, 97, 112, 46, 115, 117, 114, 114, 111, 117, 110, 100, 47, 52, 0]);
+  }
+  @inline
+  static get EXT_SURROUND_COMPAT(): usize {
+    return memory.data<u8>([99, 108, 97, 112, 46, 115, 117, 114, 114, 111, 117, 110, 100, 46, 100, 114, 97, 102, 116, 47, 52, 0]);
+  }
+  @inline
+  static get PORT_SURROUND(): usize {
+    return memory.data<u8>([115, 117, 114, 114, 111, 117, 110, 100, 0]);
+  }
+  @inline
+  static get EXT_TAIL(): usize {
+    return memory.data<u8>([99, 108, 97, 112, 46, 116, 97, 105, 108, 0]);
+  }
+  @inline
+  static get EXT_THREAD_CHECK(): usize {
+    return memory.data<u8>([99, 108, 97, 112, 46, 116, 104, 114, 101, 97, 100, 45, 99, 104, 101, 99, 107, 0]);
+  }
+  @inline
+  static get EXT_THREAD_POOL(): usize {
+    return memory.data<u8>([99, 108, 97, 112, 46, 116, 104, 114, 101, 97, 100, 45, 112, 111, 111, 108, 0]);
+  }
+  @inline
+  static get EXT_TIMER_SUPPORT(): usize {
+    return memory.data<u8>([99, 108, 97, 112, 46, 116, 105, 109, 101, 114, 45, 115, 117, 112, 112, 111, 114, 116, 0]);
+  }
+  @inline
+  static get EXT_TRACK_INFO(): usize {
+    return memory.data<u8>([99, 108, 97, 112, 46, 116, 114, 97, 99, 107, 45, 105, 110, 102, 111, 47, 49, 0]);
+  }
+  @inline
+  static get EXT_TRACK_INFO_COMPAT(): usize {
+    return memory.data<u8>([99, 108, 97, 112, 46, 116, 114, 97, 99, 107, 45, 105, 110, 102, 111, 46, 100, 114, 97, 102, 116, 47, 49, 0]);
+  }
+  @inline
+  static get EXT_VOICE_INFO(): usize {
+    return memory.data<u8>([99, 108, 97, 112, 46, 118, 111, 105, 99, 101, 45, 105, 110, 102, 111, 0]);
+  }
+  @inline
+  static get PLUGIN_STATE_CONVERTER_FACTORY_ID(): usize {
+    return memory.data<u8>([99, 108, 97, 112, 46, 112, 108, 117, 103, 105, 110, 45, 115, 116, 97, 116, 101, 45, 99, 111, 110, 118, 101, 114, 116, 101, 114, 45, 102, 97, 99, 116, 111, 114, 121, 47, 49, 0]);
+  }
+  @inline
+  static get EXT_EXTENSIBLE_AUDIO_PORTS(): usize {
+    return memory.data<u8>([99, 108, 97, 112, 46, 101, 120, 116, 101, 110, 115, 105, 98, 108, 101, 45, 97, 117, 100, 105, 111, 45, 112, 111, 114, 116, 115, 47, 49, 0]);
+  }
+  @inline
+  static get EXT_GAIN_ADJUSTMENT_METERING(): usize {
+    return memory.data<u8>([99, 108, 97, 112, 46, 103, 97, 105, 110, 45, 97, 100, 106, 117, 115, 116, 109, 101, 110, 116, 45, 109, 101, 116, 101, 114, 105, 110, 103, 47, 48, 0]);
+  }
+  @inline
+  static get EXT_MINI_CURVE_DISPLAY(): usize {
+    return memory.data<u8>([99, 108, 97, 112, 46, 109, 105, 110, 105, 45, 99, 117, 114, 118, 101, 45, 100, 105, 115, 112, 108, 97, 121, 47, 51, 0]);
+  }
+  @inline
+  static get EXT_PROJECT_LOCATION(): usize {
+    return memory.data<u8>([99, 108, 97, 112, 46, 112, 114, 111, 106, 101, 99, 116, 45, 108, 111, 99, 97, 116, 105, 111, 110, 47, 50, 0]);
+  }
+  @inline
+  static get EXT_RESOURCE_DIRECTORY(): usize {
+    return memory.data<u8>([99, 108, 97, 112, 46, 114, 101, 115, 111, 117, 114, 99, 101, 45, 100, 105, 114, 101, 99, 116, 111, 114, 121, 47, 49, 0]);
+  }
+  @inline
+  static get EXT_SCRATCH_MEMORY(): usize {
+    return memory.data<u8>([99, 108, 97, 112, 46, 115, 99, 114, 97, 116, 99, 104, 45, 109, 101, 109, 111, 114, 121, 47, 49, 0]);
+  }
+  @inline
+  static get EXT_TRANSPORT_CONTROL(): usize {
+    return memory.data<u8>([99, 108, 97, 112, 46, 116, 114, 97, 110, 115, 112, 111, 114, 116, 45, 99, 111, 110, 116, 114, 111, 108, 47, 49, 0]);
+  }
+  @inline
+  static get EXT_TRIGGERS(): usize {
+    return memory.data<u8>([99, 108, 97, 112, 46, 116, 114, 105, 103, 103, 101, 114, 115, 47, 49, 0]);
+  }
+  @inline
+  static get EXT_TUNING(): usize {
+    return memory.data<u8>([99, 108, 97, 112, 46, 116, 117, 110, 105, 110, 103, 47, 50, 0]);
+  }
+  @inline
+  static get EXT_UNDO(): usize {
+    return memory.data<u8>([99, 108, 97, 112, 46, 117, 110, 100, 111, 47, 52, 0]);
+  }
+  @inline
+  static get EXT_UNDO_CONTEXT(): usize {
+    return memory.data<u8>([99, 108, 97, 112, 46, 117, 110, 100, 111, 95, 99, 111, 110, 116, 101, 120, 116, 47, 52, 0]);
+  }
+  @inline
+  static get EXT_UNDO_DELTA(): usize {
+    return memory.data<u8>([99, 108, 97, 112, 46, 117, 110, 100, 111, 95, 100, 101, 108, 116, 97, 47, 52, 0]);
+  }
+  @inline
+  static get EXT_WEBVIEW(): usize {
+    return memory.data<u8>([99, 108, 97, 112, 46, 119, 101, 98, 118, 105, 101, 119, 47, 51, 0]);
+  }
 }

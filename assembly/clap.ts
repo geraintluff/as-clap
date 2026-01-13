@@ -172,10 +172,7 @@ export class Plugin {
 	pluginInit(): bool {
 		console.log(`pluginInit()`)
 		let host = this.host;
-		this.hostAudioPorts = host.getExtensionUtf8<HostAudioPorts>(Core.EXT_AUDIO_PORTS);
-		host.requestRestart();
-		host.requestCallback();
-		host.requestProcess();
+		this.hostAudioPorts = host.getExtensionUtf8<HostAudioPorts>(Core.Utf8.EXT_AUDIO_PORTS);
 		return true;
 	}
 	pluginDestroy(): void {
@@ -194,7 +191,7 @@ export class Plugin {
 		return 0;
 	}
 	pluginGetExtensionUtf8(extIdPtr : usize) : usize {
-		if (equalCStr(extIdPtr, Core.EXT_AUDIO_PORTS)) return changetype<usize>(coreAudioPorts);
+		if (equalCStr(extIdPtr, Core.Utf8.EXT_AUDIO_PORTS)) return changetype<usize>(coreAudioPorts);
 
 		let extId = String.UTF8.decodeUnsafe(extIdPtr, 32, true);
 		return this.pluginGetExtension(extId);

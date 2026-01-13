@@ -53,6 +53,10 @@ function addConstant(name, value, comment) {
 	comment = (comment ? ' // ' + comment : '');
 	asCode += `export const ${name} = ${value.trim()};${comment}\n`;
 }
+let stringConstants = []
+function addStringConstant(name, value) {
+	stringConstants.push({name, value});
+}
 
 let includedFiles = {};
 
@@ -115,7 +119,7 @@ function addFile(path) {
 	});
 	// and strings
 	code = code.replaceAll(/#define\s+CLAP_([A-Z_]+)\s*("[^"]+")/g, (_, name, value) => {
-		addConstant(name, value);
+		addStringConstant(name, JSON.parse(value));
 		return "";
 	});
 	// anything else that looks like a numerical constant
@@ -128,9 +132,7 @@ function addFile(path) {
 	// anything that looks like a string constant
 	code = code.replaceAll(/const\s+char\s+CLAP_([A-Z_]+)\[\]\s*=\s*("[^"]+")/g, (_, name, value) => {
 		value = JSON.parse(value);
-		let bytes = Array.from(new TextEncoder('utf8').encode(value)).concat(0);
-		let hex = bytes.map(c => '0x' + c.toString(16)).join(',');
-		addConstant(name, `memory.data<u8>([${hex}])`, value);
+		addStringConstant(name, value);
 		return "";
 	});
 	
@@ -208,6 +210,31 @@ function addStructs(cpp) {
 		asCode += `}\n`;
 	});
 }
+
+// We provide these as getters (instead of constants) so that tree-shaking removes the unused ones
+asCode += `
+@unmanaged @final
+export class Strings {`;
+stringConstants.forEach(pair => {
+	asCode += `
+		static get ${pair.name}() : string { return ${JSON.stringify(pair.value)}; }`;
+});
+asCode += `
+}`;
+asCode += `
+// The same strings, but as null-terminated UTF-8
+@unmanaged @final
+export class Utf8 {`;
+stringConstants.forEach(pair => {
+	let bytes = Array.from(new TextEncoder('utf8').encode(pair.value)).concat(0);
+	let hex = bytes.map(c => '0x' + c.toString(16)).join(',');
+	let code = `memory.data<u8>([${hex}])`;
+	asCode += `
+		@inline static get ${pair.name}() : usize { return ${code}; }`;
+});
+asCode += `
+}`;
+
 
 fs.writeFileSync("../assembly/clap-core.ts", asCode);
 
