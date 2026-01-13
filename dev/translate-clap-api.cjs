@@ -127,10 +127,7 @@ function addFile(path) {
 	});
 	// anything that looks like a string constant
 	code = code.replaceAll(/const\s+char\s+CLAP_([A-Z_]+)\[\]\s*=\s*("[^"]+")/g, (_, name, value) => {
-		value = JSON.parse(value);
-		let bytes = Array.from(new TextEncoder('utf8').encode(value)).concat(0);
-		let hex = bytes.map(c => '0x' + c.toString(16)).join(',');
-		addConstant(name, `memory.data<u8>([${hex}])`, value);
+		addConstant(name, `memory.dataUTF8(${value})`);
 		return "";
 	});
 	
