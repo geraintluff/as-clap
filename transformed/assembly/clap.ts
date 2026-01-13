@@ -28,6 +28,17 @@ let modulePath = "";
 export {
   modulePath
 };
+export function equalCStr(a: usize, b: usize): bool {
+  let memEnd = usize(memory.size() * 65536);
+  while (a < memEnd && b < memEnd) {
+    let ac = load<u8>(a++), bc = load<u8>(b++);
+    if (ac != bc) return false;
+;
+    if (!ac) return true;
+;
+  }
+  return false;
+}
 @unmanaged
 @final
 export class Version extends Core.clap_version {
@@ -60,7 +71,7 @@ export class Version extends Core.clap_version {
 @final
 export class PluginDescriptor extends Core.clap_plugin_descriptor {
   get clapVersion(): Version {
-    return changetype<Version>(this);
+    return changetype(this);
   }
   @inline
   get id(): CString {
@@ -236,6 +247,28 @@ export class Host extends Core.clap_host {
   get version(): CStringNullable {
     return getCStringNullable(this._version);
   }
+  getExtension<T extends HostExt>(extId: string): T | null {
+    let cString = String.UTF8.encode(extId, true);
+    return this.getExtensionUtf8<T>(changetype<usize>(cString));
+  }
+  getExtensionUtf8<T extends HostExt>(cString: usize): T | null {
+    let ptr = call_indirect<usize>(u32(this._get_extension), this, cString);
+    if (!ptr) return null;
+;
+    return instantiate<T>(this, ptr);
+  }
+  requestRestart(): void {
+    call_indirect(u32(this._request_restart), this);
+  }
+  requestProcess(): void {
+    call_indirect(u32(this._request_process), this);
+  }
+  requestCallback(): void {
+    call_indirect(u32(this._request_callback), this);
+  }
+}
+export class HostExt {
+  constructor(protected _host: Core.clap_host, protected _extPtr: usize) {}
 }
 @unmanaged
 @final
@@ -289,9 +322,22 @@ export class AudioPortInfo extends Core.clap_audio_port_info {
     this._in_place_pair = setRenamed<clap_id>(v, this._in_place_pair);
   }
 }
+@final
+export class HostAudioPorts extends HostExt {
+  get _ext(): Core.clap_host_audio_ports {
+    return changetype(this._extPtr);
+  }
+  isRescanFlagSupported(flag: u32): bool {
+    return call_indirect<bool>(this._ext.is_rescan_flag_supported, this._host, flag);
+  }
+  rescan(flags: u32): void {
+    return call_indirect<void>(this._ext.rescan, this._host, flags);
+  }
+}
 let activePlugins = new Map<usize, Plugin>();
 export class Plugin {
   readonly host: Host;
+  hostAudioPorts: HostAudioPorts | null = null;
   corePlugin: Core.clap_plugin;
   constructor(host: Host) {
     this.host = host;
@@ -309,15 +355,16 @@ export class Plugin {
     corePlugin._stop_processing = fnPtr((plugin: Core.clap_plugin): void => changetype<Plugin>(plugin._plugin_data).pluginStopProcessing());
     corePlugin._reset = fnPtr((plugin: Core.clap_plugin): void => changetype<Plugin>(plugin._plugin_data).pluginReset());
     corePlugin._process = fnPtr((plugin: Core.clap_plugin, process: Process): i32 => changetype<Plugin>(plugin._plugin_data).pluginProcess(process));
-    corePlugin._get_extension = fnPtr((corePlugin: Core.clap_plugin, extIdPtr: usize): usize => {
-      let extId = String.UTF8.decodeUnsafe(extIdPtr, 32, true);
-      let plugin = changetype<Plugin>(corePlugin._plugin_data);
-      return plugin.pluginGetExtension(extId);
-    });
+    corePlugin._get_extension = fnPtr((corePlugin: Core.clap_plugin, extIdPtr: usize): usize => changetype<Plugin>(corePlugin._plugin_data).pluginGetExtensionUtf8(extIdPtr));
     corePlugin._on_main_thread = fnPtr((plugin: Core.clap_plugin): void => changetype<Plugin>(plugin._plugin_data).pluginOnMainThread());
   }
   pluginInit(): bool {
     console.log(`pluginInit()`);
+    let host = this.host;
+    this.hostAudioPorts = host.getExtensionUtf8<HostAudioPorts>(Core.EXT_AUDIO_PORTS);
+    host.requestRestart();
+    host.requestCallback();
+    host.requestProcess();
     return true;
   }
   pluginDestroy(): void {
@@ -335,13 +382,19 @@ export class Plugin {
   pluginProcess(process: Process): i32 {
     return 0;
   }
-  pluginGetExtension(extId: string): usize {
-    if (extId == "clap.audio-ports") return changetype<usize>(coreAudioPorts);
+  pluginGetExtensionUtf8(extIdPtr: usize): usize {
+    if (equalCStr(extIdPtr, Core.EXT_AUDIO_PORTS)) return changetype<usize>(coreAudioPorts);
 ;
+    let extId = String.UTF8.decodeUnsafe(extIdPtr, 32, true);
+    return this.pluginGetExtension(extId);
+  }
+  pluginGetExtension(extId: string): usize {
     console.log(`as-clap: unknown extId ${extId}`);
     return 0;
   }
-  pluginOnMainThread(): void {}
+  pluginOnMainThread(): void {
+    console.log("pluginOnMainThread()");
+  }
   audioPortsCount(isInput: bool): u32 {
     return 0;
   }

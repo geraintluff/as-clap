@@ -1,6 +1,7 @@
 {
 	"extends": "./node_modules/@assemblyscript/wasi-shim/asconfig.json",
 	"entries": [
+		"./assembly/index.ts",
 		"./example/assembly/index.ts"
 	],
 	"targets": {
@@ -20,7 +21,6 @@
 	},
 	"options": {
 		"exportStart": "_initialize",
-		"path": "./",
 		"importMemory": false,
 		"sharedMemory": false,
 		"exportTable": true,

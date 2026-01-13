@@ -9,6 +9,7 @@ class MyPlugin extends Clap.Plugin {
 	}
 
 	pluginInit() : bool {
+		if (!super.pluginInit()) return false;
 		console.log(`Plugin initialised!  Module path is ${Clap.modulePath}`);
 		return true;
 	}

@@ -162,6 +162,20 @@ class WclapTransform extends Transform {
 			let transformedCode = assemblyscript.ASTBuilder.build(source);
 			console.log(`	${source.normalizedPath} -> ${transformedPath}`);
 			fs.writeFileSync(transformedPath, transformedCode);
+
+			// Replace the `transformed/` one if we can as well, since it parsed the older version
+			parsed.sources.forEach(other => {
+				if (!other.normalizedPath.endsWith(transformedPath.substr(2))) return;
+				// We've found the matching `translated/` entry - replace it with a proxy
+				let dummyCode = `export * from ${JSON.stringify(source.normalizedPath)};`;
+				let parser = new Parser();
+				parser.parseFile(dummyCode, "redirect.ts", false);
+				other.statements = parser.currentSource.statements;
+				// Resolve it to the other source file
+				other.statements[0].internalPath = source.internalPath;
+				walkAst(other.statements, n => n.range = other.range);
+				console.log(`\t\treplaced parsed ${transformedPath}`);
+			});
 		});
 	}
 }

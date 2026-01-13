@@ -48,9 +48,10 @@ let fieldCount = 0;
 let typedefCount = 0;
 let constantCount = 0;
 
-function addConstant(name, value) {
+function addConstant(name, value, comment) {
 	++constantCount;
-	asCode += `export const ${name} = ${value.trim()};\n`;
+	comment = (comment ? ' // ' + comment : '');
+	asCode += `export const ${name} = ${value.trim()};${comment}\n`;
 }
 
 let includedFiles = {};
@@ -117,11 +118,19 @@ function addFile(path) {
 		addConstant(name, value);
 		return "";
 	});
-	// and anything else that looks like a constant
-	code = code.replaceAll(/CLAP_([A-Z_]+)\s=\s*([0-9][^;,\}\)]*)/g, (_, name, value) => {
+	// anything else that looks like a numerical constant
+	code = code.replaceAll(/CLAP_([A-Z_]+)\s*=\s*([0-9][^;,\}\)]*)/g, (_, name, value) => {
 		value = value.trim();
 		if (value == "1LL << 31") value = "0x80000000";
 		addConstant(name, value);
+		return "";
+	});
+	// anything that looks like a string constant
+	code = code.replaceAll(/const\s+char\s+CLAP_([A-Z_]+)\[\]\s*=\s*("[^"]+")/g, (_, name, value) => {
+		value = JSON.parse(value);
+		let bytes = Array.from(new TextEncoder('utf8').encode(value)).concat(0);
+		let hex = bytes.map(c => '0x' + c.toString(16)).join(',');
+		addConstant(name, `memory.data<u8>([${hex}])`, value);
 		return "";
 	});
 	

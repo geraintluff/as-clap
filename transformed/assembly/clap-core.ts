@@ -475,6 +475,9 @@ export class clap_preset_discovery_factory {
 export const AMBISONIC_ORDERING_FUMA = 0;
 export const AMBISONIC_ORDERING_ACN = 1;
 export const AMBISONIC_NORMALIZATION_MAXN = 0;
+export const EXT_AMBISONIC = memory.data<u8>([99, 108, 97, 112, 46, 97, 109, 98, 105, 115, 111, 110, 105, 99, 47, 51, 0]);
+export const EXT_AMBISONIC_COMPAT = memory.data<u8>([99, 108, 97, 112, 46, 97, 109, 98, 105, 115, 111, 110, 105, 99, 46, 100, 114, 97, 102, 116, 47, 51, 0]);
+export const PORT_AMBISONIC = memory.data<u8>([97, 109, 98, 105, 115, 111, 110, 105, 99, 0]);
 @unmanaged
 export class clap_ambisonic_config {
   _ordering: u32;
@@ -489,6 +492,8 @@ export class clap_plugin_ambisonic {
 export class clap_host_ambisonic {
   _changed: usize;
 }
+export const EXT_AUDIO_PORTS_ACTIVATION = memory.data<u8>([99, 108, 97, 112, 46, 97, 117, 100, 105, 111, 45, 112, 111, 114, 116, 115, 45, 97, 99, 116, 105, 118, 97, 116, 105, 111, 110, 47, 50, 0]);
+export const EXT_AUDIO_PORTS_ACTIVATION_COMPAT = memory.data<u8>([99, 108, 97, 112, 46, 97, 117, 100, 105, 111, 45, 112, 111, 114, 116, 115, 45, 97, 99, 116, 105, 118, 97, 116, 105, 111, 110, 47, 100, 114, 97, 102, 116, 45, 50, 0]);
 @unmanaged
 export class clap_plugin_audio_ports_activation {
   _can_activate_while_processing: usize;
@@ -502,6 +507,9 @@ export const AUDIO_PORTS_RESCAN_CHANNEL_COUNT = 1 << 2;
 export const AUDIO_PORTS_RESCAN_PORT_TYPE = 1 << 3;
 export const AUDIO_PORTS_RESCAN_IN_PLACE_PAIR = 1 << 4;
 export const AUDIO_PORTS_RESCAN_LIST = 1 << 5;
+export const EXT_AUDIO_PORTS = memory.data<u8>([99, 108, 97, 112, 46, 97, 117, 100, 105, 111, 45, 112, 111, 114, 116, 115, 0]);
+export const PORT_MONO = memory.data<u8>([109, 111, 110, 111, 0]);
+export const PORT_STEREO = memory.data<u8>([115, 116, 101, 114, 101, 111, 0]);
 @unmanaged
 export class clap_audio_port_info {
   _id: clap_id;
@@ -784,6 +792,9 @@ export class clap_host_audio_ports {
   _is_rescan_flag_supported: usize;
   _rescan: usize;
 }
+export const EXT_AUDIO_PORTS_CONFIG = memory.data<u8>([99, 108, 97, 112, 46, 97, 117, 100, 105, 111, 45, 112, 111, 114, 116, 115, 45, 99, 111, 110, 102, 105, 103, 0]);
+export const EXT_AUDIO_PORTS_CONFIG_INFO = memory.data<u8>([99, 108, 97, 112, 46, 97, 117, 100, 105, 111, 45, 112, 111, 114, 116, 115, 45, 99, 111, 110, 102, 105, 103, 45, 105, 110, 102, 111, 47, 49, 0]);
+export const EXT_AUDIO_PORTS_CONFIG_INFO_COMPAT = memory.data<u8>([99, 108, 97, 112, 46, 97, 117, 100, 105, 111, 45, 112, 111, 114, 116, 115, 45, 99, 111, 110, 102, 105, 103, 45, 105, 110, 102, 111, 47, 100, 114, 97, 102, 116, 45, 48, 0]);
 @unmanaged
 export class clap_audio_ports_config {
   _id: clap_id;
@@ -1075,6 +1086,8 @@ export class clap_plugin_audio_ports_config_info {
 export class clap_host_audio_ports_config {
   _rescan: usize;
 }
+export const EXT_CONFIGURABLE_AUDIO_PORTS = memory.data<u8>([99, 108, 97, 112, 46, 99, 111, 110, 102, 105, 103, 117, 114, 97, 98, 108, 101, 45, 97, 117, 100, 105, 111, 45, 112, 111, 114, 116, 115, 47, 49, 0]);
+export const EXT_CONFIGURABLE_AUDIO_PORTS_COMPAT = memory.data<u8>([99, 108, 97, 112, 46, 99, 111, 110, 102, 105, 103, 117, 114, 97, 98, 108, 101, 45, 97, 117, 100, 105, 111, 45, 112, 111, 114, 116, 115, 46, 100, 114, 97, 102, 116, 49, 0]);
 @unmanaged
 export class clap_audio_port_configuration_request {
   _is_input: bool;
@@ -1091,6 +1104,8 @@ export class clap_plugin_configurable_audio_ports {
 export type clap_context_menu_item_kind_t = u32;
 export const CONTEXT_MENU_TARGET_KIND_GLOBAL = 0;
 export const CONTEXT_MENU_TARGET_KIND_PARAM = 1;
+export const EXT_CONTEXT_MENU = memory.data<u8>([99, 108, 97, 112, 46, 99, 111, 110, 116, 101, 120, 116, 45, 109, 101, 110, 117, 47, 49, 0]);
+export const EXT_CONTEXT_MENU_COMPAT = memory.data<u8>([99, 108, 97, 112, 46, 99, 111, 110, 116, 101, 120, 116, 45, 109, 101, 110, 117, 46, 100, 114, 97, 102, 116, 47, 48, 0]);
 @unmanaged
 export class clap_context_menu_target {
   _kind: u32;
@@ -1137,10 +1152,12 @@ export class clap_host_context_menu {
   _can_popup: usize;
   _popup: usize;
 }
+export const EXT_EVENT_REGISTRY = memory.data<u8>([99, 108, 97, 112, 46, 101, 118, 101, 110, 116, 45, 114, 101, 103, 105, 115, 116, 114, 121, 0]);
 @unmanaged
 export class clap_host_event_registry {
   _query: usize;
 }
+export const EXT_GUI = memory.data<u8>([99, 108, 97, 112, 46, 103, 117, 105, 0]);
 @unmanaged
 export class clap_gui_resize_hints {
   _can_resize_horizontally: bool;
@@ -1175,6 +1192,7 @@ export class clap_host_gui {
   _request_hide: usize;
   _closed: usize;
 }
+export const EXT_LATENCY = memory.data<u8>([99, 108, 97, 112, 46, 108, 97, 116, 101, 110, 99, 121, 0]);
 @unmanaged
 export class clap_plugin_latency {
   _get: usize;
@@ -1191,10 +1209,12 @@ export const LOG_ERROR = 3;
 export const LOG_FATAL = 4;
 export const LOG_HOST_MISBEHAVING = 5;
 export const LOG_PLUGIN_MISBEHAVING = 6;
+export const EXT_LOG = memory.data<u8>([99, 108, 97, 112, 46, 108, 111, 103, 0]);
 @unmanaged
 export class clap_host_log {
   _log: usize;
 }
+export const EXT_NOTE_NAME = memory.data<u8>([99, 108, 97, 112, 46, 110, 111, 116, 101, 45, 110, 97, 109, 101, 0]);
 @unmanaged
 export class clap_note_name {
   @inline
@@ -1479,6 +1499,7 @@ export const NOTE_DIALECT_MIDI = 1 << 1;
 export const NOTE_DIALECT_MIDI_MPE = 1 << 2;
 export const NOTE_PORTS_RESCAN_ALL = 1 << 0;
 export const NOTE_PORTS_RESCAN_NAMES = 1 << 1;
+export const EXT_NOTE_PORTS = memory.data<u8>([99, 108, 97, 112, 46, 110, 111, 116, 101, 45, 112, 111, 114, 116, 115, 0]);
 @unmanaged
 export class clap_note_port_info {
   _id: clap_id;
@@ -1786,6 +1807,7 @@ export const PARAM_RESCAN_ALL = 1 << 3;
 export const PARAM_CLEAR_ALL = 1 << 0;
 export const PARAM_CLEAR_AUTOMATIONS = 1 << 1;
 export const PARAM_CLEAR_MODULATIONS = 1 << 2;
+export const EXT_PARAMS = memory.data<u8>([99, 108, 97, 112, 46, 112, 97, 114, 97, 109, 115, 0]);
 @unmanaged
 export class clap_param_info {
   _id: clap_id;
@@ -3118,6 +3140,8 @@ export const PARAM_INDICATION_AUTOMATION_PRESENT = 1;
 export const PARAM_INDICATION_AUTOMATION_PLAYING = 2;
 export const PARAM_INDICATION_AUTOMATION_RECORDING = 3;
 export const PARAM_INDICATION_AUTOMATION_OVERRIDING = 4;
+export const EXT_PARAM_INDICATION = memory.data<u8>([99, 108, 97, 112, 46, 112, 97, 114, 97, 109, 45, 105, 110, 100, 105, 99, 97, 116, 105, 111, 110, 47, 52, 0]);
+export const EXT_PARAM_INDICATION_COMPAT = memory.data<u8>([99, 108, 97, 112, 46, 112, 97, 114, 97, 109, 45, 105, 110, 100, 105, 99, 97, 116, 105, 111, 110, 46, 100, 114, 97, 102, 116, 47, 52, 0]);
 @unmanaged
 export class clap_plugin_param_indication {
   _set_mapping: usize;
@@ -3127,6 +3151,7 @@ export type clap_posix_fd_flags_t = u32;
 export const POSIX_FD_READ = 1 << 0;
 export const POSIX_FD_WRITE = 1 << 1;
 export const POSIX_FD_ERROR = 1 << 2;
+export const EXT_POSIX_FD_SUPPORT = memory.data<u8>([99, 108, 97, 112, 46, 112, 111, 115, 105, 120, 45, 102, 100, 45, 115, 117, 112, 112, 111, 114, 116, 0]);
 @unmanaged
 export class clap_plugin_posix_fd_support {
   _on_fd: usize;
@@ -3137,6 +3162,8 @@ export class clap_host_posix_fd_support {
   _modify_fd: usize;
   _unregister_fd: usize;
 }
+export const EXT_PRESET_LOAD = memory.data<u8>([99, 108, 97, 112, 46, 112, 114, 101, 115, 101, 116, 45, 108, 111, 97, 100, 47, 50, 0]);
+export const EXT_PRESET_LOAD_COMPAT = memory.data<u8>([99, 108, 97, 112, 46, 112, 114, 101, 115, 101, 116, 45, 108, 111, 97, 100, 46, 100, 114, 97, 102, 116, 47, 50, 0]);
 @unmanaged
 export class clap_plugin_preset_load {
   _from_location: usize;
@@ -3146,6 +3173,8 @@ export class clap_host_preset_load {
   _on_error: usize;
   _loaded: usize;
 }
+export const EXT_REMOTE_CONTROLS = memory.data<u8>([99, 108, 97, 112, 46, 114, 101, 109, 111, 116, 101, 45, 99, 111, 110, 116, 114, 111, 108, 115, 47, 50, 0]);
+export const EXT_REMOTE_CONTROLS_COMPAT = memory.data<u8>([99, 108, 97, 112, 46, 114, 101, 109, 111, 116, 101, 45, 99, 111, 110, 116, 114, 111, 108, 115, 46, 100, 114, 97, 102, 116, 47, 50, 0]);
 @unmanaged
 export class clap_remote_controls_page {
   @inline
@@ -3708,6 +3737,7 @@ export class clap_host_remote_controls {
 export type clap_plugin_render_mode = i32;
 export const RENDER_REALTIME = 0;
 export const RENDER_OFFLINE = 1;
+export const EXT_RENDER = memory.data<u8>([99, 108, 97, 112, 46, 114, 101, 110, 100, 101, 114, 0]);
 @unmanaged
 export class clap_plugin_render {
   _has_hard_realtime_requirement: usize;
@@ -3726,11 +3756,13 @@ export class clap_ostream {
 export const STATE_CONTEXT_FOR_PRESET = 1;
 export const STATE_CONTEXT_FOR_DUPLICATE = 2;
 export const STATE_CONTEXT_FOR_PROJECT = 3;
+export const EXT_STATE_CONTEXT = memory.data<u8>([99, 108, 97, 112, 46, 115, 116, 97, 116, 101, 45, 99, 111, 110, 116, 101, 120, 116, 47, 50, 0]);
 @unmanaged
 export class clap_plugin_state_context {
   _save: usize;
   _load: usize;
 }
+export const EXT_STATE = memory.data<u8>([99, 108, 97, 112, 46, 115, 116, 97, 116, 101, 0]);
 @unmanaged
 export class clap_plugin_state {
   _save: usize;
@@ -3760,6 +3792,9 @@ export const SURROUND_TBC = 16;
 export const SURROUND_TBR = 17;
 export const SURROUND_TSL = 18;
 export const SURROUND_TSR = 19;
+export const EXT_SURROUND = memory.data<u8>([99, 108, 97, 112, 46, 115, 117, 114, 114, 111, 117, 110, 100, 47, 52, 0]);
+export const EXT_SURROUND_COMPAT = memory.data<u8>([99, 108, 97, 112, 46, 115, 117, 114, 114, 111, 117, 110, 100, 46, 100, 114, 97, 102, 116, 47, 52, 0]);
+export const PORT_SURROUND = memory.data<u8>([115, 117, 114, 114, 111, 117, 110, 100, 0]);
 @unmanaged
 export class clap_plugin_surround {
   _is_channel_mask_supported: usize;
@@ -3769,6 +3804,7 @@ export class clap_plugin_surround {
 export class clap_host_surround {
   _changed: usize;
 }
+export const EXT_TAIL = memory.data<u8>([99, 108, 97, 112, 46, 116, 97, 105, 108, 0]);
 @unmanaged
 export class clap_plugin_tail {
   _get: usize;
@@ -3777,11 +3813,13 @@ export class clap_plugin_tail {
 export class clap_host_tail {
   _changed: usize;
 }
+export const EXT_THREAD_CHECK = memory.data<u8>([99, 108, 97, 112, 46, 116, 104, 114, 101, 97, 100, 45, 99, 104, 101, 99, 107, 0]);
 @unmanaged
 export class clap_host_thread_check {
   _is_main_thread: usize;
   _is_audio_thread: usize;
 }
+export const EXT_THREAD_POOL = memory.data<u8>([99, 108, 97, 112, 46, 116, 104, 114, 101, 97, 100, 45, 112, 111, 111, 108, 0]);
 @unmanaged
 export class clap_plugin_thread_pool {
   _exec: usize;
@@ -3790,6 +3828,7 @@ export class clap_plugin_thread_pool {
 export class clap_host_thread_pool {
   _request_exec: usize;
 }
+export const EXT_TIMER_SUPPORT = memory.data<u8>([99, 108, 97, 112, 46, 116, 105, 109, 101, 114, 45, 115, 117, 112, 112, 111, 114, 116, 0]);
 @unmanaged
 export class clap_plugin_timer_support {
   _on_timer: usize;
@@ -3799,6 +3838,8 @@ export class clap_host_timer_support {
   _register_timer: usize;
   _unregister_timer: usize;
 }
+export const EXT_TRACK_INFO = memory.data<u8>([99, 108, 97, 112, 46, 116, 114, 97, 99, 107, 45, 105, 110, 102, 111, 47, 49, 0]);
+export const EXT_TRACK_INFO_COMPAT = memory.data<u8>([99, 108, 97, 112, 46, 116, 114, 97, 99, 107, 45, 105, 110, 102, 111, 46, 100, 114, 97, 102, 116, 47, 49, 0]);
 @unmanaged
 export class clap_track_info {
   _flags: u64;
@@ -4086,6 +4127,7 @@ export class clap_host_track_info {
   _get: usize;
 }
 export const VOICE_INFO_SUPPORTS_OVERLAPPING_NOTES = 1 << 0;
+export const EXT_VOICE_INFO = memory.data<u8>([99, 108, 97, 112, 46, 118, 111, 105, 99, 101, 45, 105, 110, 102, 111, 0]);
 @unmanaged
 export class clap_voice_info {
   _voice_count: u32;
@@ -4112,6 +4154,7 @@ export class clap_plugin_invalidation_factory {
   _get: usize;
   _refresh: usize;
 }
+export const PLUGIN_STATE_CONVERTER_FACTORY_ID = memory.data<u8>([99, 108, 97, 112, 46, 112, 108, 117, 103, 105, 110, 45, 115, 116, 97, 116, 101, 45, 99, 111, 110, 118, 101, 114, 116, 101, 114, 45, 102, 97, 99, 116, 111, 114, 121, 47, 49, 0]);
 @unmanaged
 export class clap_plugin_state_converter_descriptor {
   _clap_version_major: u32;
@@ -4154,11 +4197,13 @@ export class clap_plugin_state_converter_factory {
   _get_descriptor: usize;
   _create: usize;
 }
+export const EXT_EXTENSIBLE_AUDIO_PORTS = memory.data<u8>([99, 108, 97, 112, 46, 101, 120, 116, 101, 110, 115, 105, 98, 108, 101, 45, 97, 117, 100, 105, 111, 45, 112, 111, 114, 116, 115, 47, 49, 0]);
 @unmanaged
 export class clap_plugin_extensible_audio_ports {
   _add_port: usize;
   _remove_port: usize;
 }
+export const EXT_GAIN_ADJUSTMENT_METERING = memory.data<u8>([99, 108, 97, 112, 46, 103, 97, 105, 110, 45, 97, 100, 106, 117, 115, 116, 109, 101, 110, 116, 45, 109, 101, 116, 101, 114, 105, 110, 103, 47, 48, 0]);
 @unmanaged
 export class clap_plugin_gain_adjustment_metering {
   _get: usize;
@@ -4171,6 +4216,7 @@ export const MINI_CURVE_DISPLAY_CURVE_KIND_GAIN_REDUCTION = 4;
 export const MINI_CURVE_DISPLAY_CURVE_KIND_TIME_SERIES = 5;
 export const MINI_CURVE_DISPLAY_CURVE_CHANGED = 1 << 0;
 export const MINI_CURVE_DISPLAY_AXIS_NAME_CHANGED = 1 << 1;
+export const EXT_MINI_CURVE_DISPLAY = memory.data<u8>([99, 108, 97, 112, 46, 109, 105, 110, 105, 45, 99, 117, 114, 118, 101, 45, 100, 105, 115, 112, 108, 97, 121, 47, 51, 0]);
 @unmanaged
 export class clap_mini_curve_display_curve_hints {
   _x_min: f64;
@@ -4209,6 +4255,7 @@ export const PROJECT_LOCATION_RETURN_TRACK = 4;
 export const PROJECT_LOCATION_MASTER_TRACK = 5;
 export const PROJECT_LOCATION_HAS_INDEX = 1 << 0;
 export const PROJECT_LOCATION_HAS_COLOR = 1 << 1;
+export const EXT_PROJECT_LOCATION = memory.data<u8>([99, 108, 97, 112, 46, 112, 114, 111, 106, 101, 99, 116, 45, 108, 111, 99, 97, 116, 105, 111, 110, 47, 50, 0]);
 @unmanaged
 export class clap_project_location_element {
   _flags: u64;
@@ -5524,6 +5571,7 @@ export class clap_project_location_element {
 export class clap_plugin_project_location {
   _set: usize;
 }
+export const EXT_RESOURCE_DIRECTORY = memory.data<u8>([99, 108, 97, 112, 46, 114, 101, 115, 111, 117, 114, 99, 101, 45, 100, 105, 114, 101, 99, 116, 111, 114, 121, 47, 49, 0]);
 @unmanaged
 export class clap_plugin_resource_directory {
   _set_directory: usize;
@@ -5536,11 +5584,13 @@ export class clap_host_resource_directory {
   _request_directory: usize;
   _release_directory: usize;
 }
+export const EXT_SCRATCH_MEMORY = memory.data<u8>([99, 108, 97, 112, 46, 115, 99, 114, 97, 116, 99, 104, 45, 109, 101, 109, 111, 114, 121, 47, 49, 0]);
 @unmanaged
 export class clap_host_scratch_memory {
   _reserve: usize;
   _access: usize;
 }
+export const EXT_TRANSPORT_CONTROL = memory.data<u8>([99, 108, 97, 112, 46, 116, 114, 97, 110, 115, 112, 111, 114, 116, 45, 99, 111, 110, 116, 114, 111, 108, 47, 49, 0]);
 @unmanaged
 export class clap_host_transport_control {
   _request_start: usize;
@@ -5567,6 +5617,7 @@ export const TRIGGER_RESCAN_INFO = 1 << 0;
 export const TRIGGER_RESCAN_ALL = 1 << 1;
 export const TRIGGER_CLEAR_ALL = 1 << 0;
 export const TRIGGER_CLEAR_AUTOMATIONS = 1 << 1;
+export const EXT_TRIGGERS = memory.data<u8>([99, 108, 97, 112, 46, 116, 114, 105, 103, 103, 101, 114, 115, 47, 49, 0]);
 @unmanaged
 export class clap_event_trigger {
   _header_size: u32;
@@ -6897,6 +6948,7 @@ export class clap_host_triggers {
   _rescan: usize;
   _clear: usize;
 }
+export const EXT_TUNING = memory.data<u8>([99, 108, 97, 112, 46, 116, 117, 110, 105, 110, 103, 47, 50, 0]);
 @unmanaged
 export class clap_event_tuning {
   _header_size: u32;
@@ -7192,6 +7244,9 @@ export class clap_host_tuning {
   _get_tuning_count: usize;
   _get_info: usize;
 }
+export const EXT_UNDO = memory.data<u8>([99, 108, 97, 112, 46, 117, 110, 100, 111, 47, 52, 0]);
+export const EXT_UNDO_CONTEXT = memory.data<u8>([99, 108, 97, 112, 46, 117, 110, 100, 111, 95, 99, 111, 110, 116, 101, 120, 116, 47, 52, 0]);
+export const EXT_UNDO_DELTA = memory.data<u8>([99, 108, 97, 112, 46, 117, 110, 100, 111, 95, 100, 101, 108, 116, 97, 47, 52, 0]);
 @unmanaged
 export class clap_undo_delta_properties {
   _has_delta: bool;
@@ -7221,6 +7276,7 @@ export class clap_host_undo {
   _request_redo: usize;
   _set_wants_context_updates: usize;
 }
+export const EXT_WEBVIEW = memory.data<u8>([99, 108, 97, 112, 46, 119, 101, 98, 118, 105, 101, 119, 47, 51, 0]);
 @unmanaged
 export class clap_plugin_webview {
   _get_uri: usize;

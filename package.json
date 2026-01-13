@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "WCLAP written in AssemblyScript",
   "main": "asconfig.json",
-  "ascMain": "assembly/clap.ts",
+  "ascMain": "translated/assembly/clap.ts",
   "author": "Geraint <geraint@signalsmith-audio.co.uk>",
   "license": "BSL",
   "scripts": {
