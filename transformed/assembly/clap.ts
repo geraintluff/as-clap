@@ -1,22 +1,123 @@
 import * as Core from "./clap-core";
-import * as property from "./property";
 import {
-  fnPtr,
-  equalCStr,
-  Version,
-  AudioBuffer,
-  Process
-} from "./common";
-import {
-  Host
-} from "./host";
-import {
-  HostAudioPorts
-} from "./ext/audio-ports";
-let modulePath = "";
-export {
-  modulePath
-};
+  CString,
+  getCString,
+  setCString,
+  CStringNullable,
+  getCStringNullable,
+  setCStringNullable,
+  CString256,
+  setCString256,
+  getCString256,
+  Renamed,
+  getRenamed,
+  setRenamed,
+  NullablePtr,
+  getNullablePtr,
+  setNullablePtr,
+  CNumPtr,
+  getCNumPtr,
+  CObjPtr,
+  getCObjPtr,
+  CPtrPtr,
+  getCPtrPtr
+} from "./properties";
+export function fnPtr<F>(fn: F): usize {
+  assert(load<usize>(changetype<usize>(fn) + sizeof<usize>()) == 0, "_env of function must be zero if you're taking a pointer");
+  return load<usize>(changetype<usize>(fn));
+}
+export function equalCStr(a: usize, b: usize): bool {
+  let memEnd = usize(memory.size() * 65536);
+  while (a < memEnd && b < memEnd) {
+    let ac = load<u8>(a++), bc = load<u8>(b++);
+    if (ac != bc) return false;
+;
+    if (!ac) return true;
+;
+  }
+  return false;
+}
+@unmanaged
+@final
+export class Version extends Core.clap_version {
+  @inline
+  get major(): Renamed<u32> {
+    return getRenamed<u32>(this._major);
+  }
+  @inline
+  get minor(): Renamed<u32> {
+    return getRenamed<u32>(this._minor);
+  }
+  @inline
+  get revision(): Renamed<u32> {
+    return getRenamed<u32>(this._revision);
+  }
+}
+@unmanaged
+@final
+export class AudioBuffer extends Core.clap_audio_buffer {
+  @inline
+  get data32(): CPtrPtr<CNumPtr<f32>> {
+    return getCPtrPtr<CNumPtr<f32>>(this._data32);
+  }
+  @inline
+  get data64(): CPtrPtr<CNumPtr<f64>> {
+    return getCPtrPtr<CNumPtr<f64>>(this._data64);
+  }
+  @inline
+  get channelCount(): Renamed<u32> {
+    return getRenamed<u32>(this._channel_count);
+  }
+  @inline
+  get latency(): Renamed<u32> {
+    return getRenamed<u32>(this._latency);
+  }
+  @inline
+  set latency(v: Renamed<u32>) {
+    this._latency = setRenamed<u32>(v, this._latency);
+  }
+  @inline
+  get constantMask(): Renamed<u32> {
+    return getRenamed<u32>(this._constant_mask);
+  }
+  @inline
+  set constantMask(v: Renamed<u32>) {
+    this._constant_mask = setRenamed<u32>(v, this._constant_mask);
+  }
+}
+@unmanaged
+@final
+export class Process extends Core.clap_process {
+  @inline
+  get steadyTime(): Renamed<u32> {
+    return getRenamed<u32>(this._steady_time);
+  }
+  @inline
+  get framesCount(): Renamed<u32> {
+    return getRenamed<u32>(this._frames_count);
+  }
+  @inline
+  get transport(): NullablePtr<clap_event_transport> {
+    return getNullablePtr<clap_event_transport>(this._transport);
+  }
+  @inline
+  get audioInputs(): CObjPtr<AudioBuffer> {
+    return getCObjPtr<AudioBuffer>(this._audio_inputs);
+  }
+  @inline
+  get audioOutputs(): CObjPtr<AudioBuffer> {
+    return getCObjPtr<AudioBuffer>(this._audio_outputs);
+  }
+  @inline
+  get audioInputsCount(): Renamed<u32> {
+    return getRenamed<u32>(this._audio_inputs_count);
+  }
+  @inline
+  get audioOutputsCount(): Renamed<u32> {
+    return getRenamed<u32>(this._audio_outputs_count);
+  }
+}
+assert(offsetof<Core.clap_process>() == offsetof<Process>(), "`Process` must have the exact same layout as `clap_process` (no extra fields)");
 @unmanaged
 @final
 export class PluginDescriptor extends Core.clap_plugin_descriptor {
@@ -24,68 +125,68 @@ export class PluginDescriptor extends Core.clap_plugin_descriptor {
     return changetype(this);
   }
   @inline
-  get id(): property.CString {
-    return property.getCString(this._id);
+  get id(): CString {
+    return getCString(this._id);
   }
   @inline
-  set id(v: property.CString) {
-    this._id = property.setCString(v, this._id);
+  set id(v: CString) {
+    this._id = setCString(v, this._id);
   }
   @inline
-  get name(): property.CString {
-    return property.getCString(this._name);
+  get name(): CString {
+    return getCString(this._name);
   }
   @inline
-  set name(v: property.CString) {
-    this._name = property.setCString(v, this._name);
+  set name(v: CString) {
+    this._name = setCString(v, this._name);
   }
   @inline
-  get vendor(): property.CStringNullable {
-    return property.getCStringNullable(this._vendor);
+  get vendor(): CStringNullable {
+    return getCStringNullable(this._vendor);
   }
   @inline
-  set vendor(v: property.CStringNullable) {
-    this._vendor = property.setCStringNullable(v, this._vendor);
+  set vendor(v: CStringNullable) {
+    this._vendor = setCStringNullable(v, this._vendor);
   }
   @inline
-  get url(): property.CStringNullable {
-    return property.getCStringNullable(this._url);
+  get url(): CStringNullable {
+    return getCStringNullable(this._url);
   }
   @inline
-  set url(v: property.CStringNullable) {
-    this._url = property.setCStringNullable(v, this._url);
+  set url(v: CStringNullable) {
+    this._url = setCStringNullable(v, this._url);
   }
   @inline
-  get manualUrl(): property.CStringNullable {
-    return property.getCStringNullable(this._manual_url);
+  get manualUrl(): CStringNullable {
+    return getCStringNullable(this._manual_url);
   }
   @inline
-  set manualUrl(v: property.CStringNullable) {
-    this._manual_url = property.setCStringNullable(v, this._manual_url);
+  set manualUrl(v: CStringNullable) {
+    this._manual_url = setCStringNullable(v, this._manual_url);
   }
   @inline
-  get supportUrl(): property.CStringNullable {
-    return property.getCStringNullable(this._support_url);
+  get supportUrl(): CStringNullable {
+    return getCStringNullable(this._support_url);
   }
   @inline
-  set supportUrl(v: property.CStringNullable) {
-    this._support_url = property.setCStringNullable(v, this._support_url);
+  set supportUrl(v: CStringNullable) {
+    this._support_url = setCStringNullable(v, this._support_url);
   }
   @inline
-  get version(): property.CStringNullable {
-    return property.getCStringNullable(this._version);
+  get version(): CStringNullable {
+    return getCStringNullable(this._version);
   }
   @inline
-  set version(v: property.CStringNullable) {
-    this._version = property.setCStringNullable(v, this._version);
+  set version(v: CStringNullable) {
+    this._version = setCStringNullable(v, this._version);
   }
   @inline
-  get description(): property.CStringNullable {
-    return property.getCStringNullable(this._description);
+  get description(): CStringNullable {
+    return getCStringNullable(this._description);
   }
   @inline
-  set description(v: property.CStringNullable) {
-    this._description = property.setCStringNullable(v, this._description);
+  set description(v: CStringNullable) {
+    this._description = setCStringNullable(v, this._description);
   }
   get features(): Array<string> {
     let result = new Array<string>();
@@ -104,120 +205,154 @@ export class PluginDescriptor extends Core.clap_plugin_descriptor {
     while (featureList % (1 << alignof<usize>())) ++featureList;
     this._features = featureList;
     for (let i: i32 = 0; i < list.length; ++i) {
-      let rawPtr = property.setCStringNullable(list[i], 0);
+      let rawPtr = setCStringNullable(list[i], 0);
       store<usize>(featureList + sizeof<usize>() * i, rawPtr);
     }
     store<usize>(featureList + sizeof<usize>() * list.length, 0);
   }
 }
-let activePlugins = new Map<usize, Plugin>();
-export class Plugin {
-  readonly host: Host;
-  hostAudioPorts: HostAudioPorts | null = null;
-  private corePlugin: Core.clap_plugin;
-  constructor(host: Host) {
-    this.host = host;
-    let corePlugin = this.corePlugin = new Core.clap_plugin();
-    corePlugin._plugin_data = changetype<usize>(this);
-    corePlugin._init = fnPtr<(ptr: Core.clap_plugin) => bool>((ptr: Core.clap_plugin): bool => getPlugin(ptr).pluginInit());
-    corePlugin._destroy = fnPtr((ptr: Core.clap_plugin): void => {
-      getPlugin(ptr).pluginDestroy();
-      activePlugins.delete(changetype<usize>(ptr));
-    });
-    corePlugin._activate = fnPtr((ptr: Core.clap_plugin, sampleRate: f64, minFrames: u32, maxFrames: u32): bool => getPlugin(ptr).pluginActivate(sampleRate, minFrames, maxFrames));
-    corePlugin._deactivate = fnPtr((ptr: Core.clap_plugin): void => getPlugin(ptr).pluginDeactivate());
-    corePlugin._start_processing = fnPtr((ptr: Core.clap_plugin): bool => getPlugin(ptr).pluginStartProcessing());
-    corePlugin._stop_processing = fnPtr((ptr: Core.clap_plugin): void => getPlugin(ptr).pluginStopProcessing());
-    corePlugin._reset = fnPtr((ptr: Core.clap_plugin): void => getPlugin(ptr).pluginReset());
-    corePlugin._process = fnPtr((ptr: Core.clap_plugin, process: Process): i32 => getPlugin(ptr).pluginProcess(process));
-    corePlugin._get_extension = fnPtr((corePlugin: Core.clap_plugin, extIdPtr: usize): usize => changetype<Plugin>(corePlugin._plugin_data).pluginGetExtensionUtf8(extIdPtr));
-    corePlugin._on_main_thread = fnPtr((ptr: Core.clap_plugin): void => getPlugin(ptr).pluginOnMainThread());
+@unmanaged
+@final
+export class AudioPortInfo extends Core.clap_audio_port_info {
+  @inline
+  get id(): Renamed<Core.clap_id> {
+    return getRenamed<Core.clap_id>(this._id);
   }
-  pluginInit(): bool {
-    console.log(`pluginInit()`);
-    let host = this.host;
-    this.hostAudioPorts = host.getExtensionUtf8<HostAudioPorts>(Core.Utf8.EXT_AUDIO_PORTS);
-    return true;
+  @inline
+  set id(v: Renamed<Core.clap_id>) {
+    this._id = setRenamed<Core.clap_id>(v, this._id);
   }
-  pluginDestroy(): void {
-    heap.free(changetype<usize>(this.corePlugin));
+  @inline
+  get name(): CString256 {
+    return getCString256(this._name);
   }
-  pluginActivate(sampleRate: f64, minFrames: u32, maxFrames: u32): bool {
-    return true;
+  @inline
+  set name(v: CString256) {
+    this._name = setCString256(v, this._name);
   }
-  pluginDeactivate(): void {}
-  pluginStartProcessing(): bool {
-    return true;
+  @inline
+  get flags(): Renamed<u32> {
+    return getRenamed<u32>(this._flags);
   }
-  pluginStopProcessing(): void {}
-  pluginReset(): void {}
-  pluginProcess(process: Process): i32 {
-    return 0;
+  @inline
+  set flags(v: Renamed<u32>) {
+    this._flags = setRenamed<u32>(v, this._flags);
   }
-  pluginGetExtensionUtf8(extIdPtr: usize): usize {
-    if (equalCStr(extIdPtr, Core.Utf8.EXT_AUDIO_PORTS)) return changetype<usize>(coreAudioPorts);
+  @inline
+  get channelCount(): Renamed<u32> {
+    return getRenamed<u32>(this._channel_count);
+  }
+  @inline
+  set channelCount(v: Renamed<u32>) {
+    this._channel_count = setRenamed<u32>(v, this._channel_count);
+  }
+  @inline
+  get portType(): CString {
+    return getCString(this._port_type);
+  }
+  @inline
+  set portType(v: CString) {
+    this._port_type = setCString(v, this._port_type);
+  }
+  @inline
+  get inPlacePair(): Renamed<clap_id> {
+    return getRenamed<clap_id>(this._in_place_pair);
+  }
+  @inline
+  set inPlacePair(v: Renamed<clap_id>) {
+    this._in_place_pair = setRenamed<clap_id>(v, this._in_place_pair);
+  }
+}
+@unmanaged
+@final
+export class ParamInfo extends Core.clap_param_info {
+  @inline
+  get id(): Renamed<clap_id> {
+    return getRenamed<clap_id>(this._id);
+  }
+  @inline
+  set id(v: Renamed<clap_id>) {
+    this._id = setRenamed<clap_id>(v, this._id);
+  }
+  @inline
+  get flags(): Renamed<u32> {
+    return getRenamed<u32>(this._flags);
+  }
+  @inline
+  set flags(v: Renamed<u32>) {
+    this._flags = setRenamed<u32>(v, this._flags);
+  }
+  @inline
+  get cookie(): Renamed<usize> {
+    return getRenamed<usize>(this._cookie);
+  }
+  @inline
+  set cookie(v: Renamed<usize>) {
+    this._cookie = setRenamed<usize>(v, this._cookie);
+  }
+  @inline
+  get name(): CString256 {
+    return getCString256(this._name);
+  }
+  @inline
+  set name(v: CString256) {
+    this._name = setCString256(v, this._name);
+  }
+  @inline
+  get module(): CString1024 {
+    return getCString1024(this._module);
+  }
+  @inline
+  set module(v: CString1024) {
+    this._module = setCString1024(v, this._module);
+  }
+  @inline
+  get minValue(): Renamed<f64> {
+    return getRenamed<f64>(this._min_value);
+  }
+  @inline
+  set minValue(v: Renamed<f64>) {
+    this._min_value = setRenamed<f64>(v, this._min_value);
+  }
+  @inline
+  get maxValue(): Renamed<f64> {
+    return getRenamed<f64>(this._max_value);
+  }
+  @inline
+  set maxValue(v: Renamed<f64>) {
+    this._max_value = setRenamed<f64>(v, this._max_value);
+  }
+  @inline
+  get defaultValue(): Renamed<f64> {
+    return getRenamed<f64>(this._default_value);
+  }
+  @inline
+  set defaultValue(v: Renamed<f64>) {
+    this._default_value = setRenamed<f64>(v, this._default_value);
+  }
+}
+@unmanaged
+@final
+export class InputEvents extends Core.clap_input_events {
+  @inline
+  get size(): u32 {
+    return call_indirect<u32>(u32(this._size), this);
+  }
+  @inline
+  @operator("[]")
+  get(index: usize): Core.clap_event_header {
+    let index32 = u32(index);
+    let size = call_indirect<u32>(u32(this._size), this);
+    if (index32 >= size) unreachable();
 ;
-    let extId = String.UTF8.decodeUnsafe(extIdPtr, 32, true);
-    return this.pluginGetExtension(extId);
-  }
-  pluginGetExtension(extId: string): usize {
-    console.log(`as-clap: unknown extId ${extId}`);
-    return 0;
-  }
-  pluginOnMainThread(): void {
-    console.log("pluginOnMainThread()");
-  }
-  audioPortsCount(isInput: bool): u32 {
-    return 0;
-  }
-  audioPortsGet(index: u32, isInput: bool, info: AudioPortInfo): bool {
-    return false;
+    return call_indirect<Core.clap_event_header>(u32(this._get), this, index32);
   }
 }
-@inline
-function getPlugin(ptr: Core.clap_plugin): Plugin {
-  return changetype<Plugin>(ptr._plugin_data);
-}
-let coreAudioPorts = new Core.clap_plugin_audio_ports();
-class RegisteredClapPlugin {
-  constructor(public id: string, public desc: Core.clap_plugin_descriptor, public create: (host: Core.clap_host, desc: Core.clap_plugin_descriptor) => Core.clap_plugin) {}
-}
-let registeredPluginList = new Array<RegisteredClapPlugin>();
-export function registerPlugin<PluginClass extends Plugin>(pluginName: string, pluginId: string): PluginDescriptor {
-  let desc = new PluginDescriptor();
-  desc.id = pluginId;
-  desc.name = pluginName;
-  desc.features = ["audio-effect"];
-  let createFn = function(host: Core.clap_host, desc: Core.clap_plugin_descriptor): Core.clap_plugin {
-    let plugin = instantiate<PluginClass>(changetype<Host>(host));
-    let corePlugin = plugin.corePlugin;
-    activePlugins.set(changetype<usize>(corePlugin), plugin);
-    corePlugin._desc = changetype<usize>(desc);
-    return corePlugin;
-  };
-  registeredPluginList.push(new RegisteredClapPlugin(pluginId, desc, createFn));
-  return desc;
-}
-function pluginFactory_get_plugin_count(self: Core.clap_plugin_factory): usize {
-  return registeredPluginList.length;
-}
-function pluginFactory_get_plugin_descriptor(self: Core.clap_plugin_factory, index: u32): usize {
-  if (index >= u32(registeredPluginList.length)) return 0;
-;
-  return changetype<usize>(registeredPluginList[index].desc);
-}
-function pluginFactory_create_plugin(self: Core.clap_plugin_factory, host: Core.clap_host, strPtr: usize): usize {
-  let pluginId = String.UTF8.decodeUnsafe(strPtr, 8192, true);
-  for (let i = 0; i < registeredPluginList.length; ++i) {
-    let registered = registeredPluginList[i];
-    if (registered.id == pluginId) {
-      let corePlugin = registered.create(host, registered.desc);
-      return changetype<usize>(corePlugin);
-    }
+@unmanaged
+@final
+export class OutputEvents extends Core.clap_output_events {
+  @inline
+  tryPush(event: Core.clap_event_header): bool {
+    return call_indirect<bool>(u32(this._try_push), this, event);
   }
-  return 0;
 }
-export let pluginFactory = new Core.clap_plugin_factory();
-pluginFactory._get_plugin_count = fnPtr(pluginFactory_get_plugin_count);
-pluginFactory._get_plugin_descriptor = fnPtr(pluginFactory_get_plugin_descriptor);
-pluginFactory._create_plugin = fnPtr(pluginFactory_create_plugin);

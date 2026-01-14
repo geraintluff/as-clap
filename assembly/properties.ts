@@ -1,12 +1,30 @@
 export const MAX_CSTRING_LENGTH = 8192;
 export const MAX_FEATURE_COUNT = 100;
 
+@inline export function getCStringN(ptr: usize, maxLength: usize) : string {
+	return String.UTF8.decodeUnsafe(ptr, maxLength, true);
+}
+export function setCStringN(str: string, ptr: usize, length: i32) : void {
+	let bytes = String.UTF8.byteLength(str, true);
+	while (bytes > length) {
+		let extra = bytes - length;
+		str = str.substring(0, str.length - extra); // trim off a bit
+		bytes = String.UTF8.byteLength(str, true);
+	}
+	String.UTF8.encodeUnsafe(changetype<usize>(str), str.length, ptr, true);
+	// Fill the rest with 0
+	while (bytes < length) {
+		store<u8>(ptr + bytes, 0);
+		++bytes;
+	}
+}
+
 //---- `@property` types and methods ----//
 
 // @property methods to translate a `string` into C-style UTF8 `char *`
 export type CString = string;
 @inline export function getCString(ptr: usize): string {
-	return String.UTF8.decodeUnsafe(ptr, MAX_CSTRING_LENGTH, true);
+	return getCStringN(ptr, MAX_CSTRING_LENGTH);
 }
 export function setCString(str: string, ptr: usize): usize {
 	if (ptr != 0) heap.free(ptr); // free previous string
@@ -27,14 +45,13 @@ export type CStringNullable = string | null;
 }
 
 // Fixed-size string
+
 export type CString256 = string;
 @inline export function getCString256(first: usize) : string {
 	return String.UTF8.decodeUnsafe(first, 256, true);
 }
-@inline export function setCString256(str : string, first: usize) : usize {
-	let bytes = String.UTF8.byteLength(str, true);
-	while (bytes > 256) str = str.substring(0, str.length - 1); // keep trimming until it fits
-	String.UTF8.encodeUnsafe(changetype<usize>(str), str.length, first, true);
+@inline export function setCString256(str: string, first: usize) : usize {
+	setCStringN(str, first, 256)
 	return first; // the same
 }
 
@@ -58,9 +75,9 @@ export type NullablePtr<Obj> = Obj | null;
 
 //---- Classes for re-interpreting C-style arrays (pointers) ----//
 
-// Contiguous array of simple values
+// Pointer to (or array of) simple values
 @unmanaged @final
-export class CNumArray<T> {
+export class CNumPtr<T> {
 	@inline @operator("[]") get(i: usize) : T {
 		return load<T>(changetype<usize>(this) + sizeof<T>()*i);
 	}
@@ -69,24 +86,24 @@ export class CNumArray<T> {
 		return v;
 	}
 }
-@inline export function getCNumArray<T>(ptr : usize) : CNumArray<T> {
-	return changetype<CNumArray<T>>(ptr);
+@inline export function getCNumPtr<T>(ptr : usize) : CNumPtr<T> {
+	return changetype<CNumPtr<T>>(ptr);
 }
 
-// Contiguous array of objects/structs
+// Pointer to (or array of) values which are objects in AssemblyScript, so we return them as a pointer
 @unmanaged @final
-export class CObjArray<T> {
+export class CObjPtr<T> {
 	@inline @operator("[]") get(i: usize) : T {
 		return changetype<T>(changetype<usize>(this) + offsetof<T>()*i);
 	}
 }
-@inline export function getCObjArray<T>(ptr : usize) : CObjArray<T> {
-	return changetype<CObjArray<T>>(ptr);
+@inline export function getCObjPtr<T>(ptr : usize) : CObjPtr<T> {
+	return changetype<CObjPtr<T>>(ptr);
 }
 
-// Contiguous array of pointers to objects
+// Pointer to (or array of) pointers, which should be interpreted as T, some @unmanaged AssemblyScript class
 @unmanaged @final
-export class CPtrArray<T> {
+export class CPtrPtr<T> {
 	@inline @operator("[]") get(i: usize) : T {
 		let ptr = changetype<usize>(this) + sizeof<usize>()*i;
 		return changetype<T>(load<usize>(ptr));
@@ -97,6 +114,6 @@ export class CPtrArray<T> {
 		return v;
 	}
 }
-@inline export function getCPtrArray<T>(ptr : usize) : CPtrArray<T> {
-	return changetype<CPtrArray<T>>(ptr);
+@inline export function getCPtrPtr<T>(ptr : usize) : CPtrPtr<T> {
+	return changetype<CPtrPtr<T>>(ptr);
 }

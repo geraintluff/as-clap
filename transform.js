@@ -40,11 +40,11 @@ will be replaced by accessors which translates to/from a friendlier type
 
 	class MyClass {
 		@property
-		get proxyMember(): property.ProxyType {
-			return property.getProxyType(rawExpr);
+		get proxyMember(): ProxyType {
+			return getProxyType(rawExpr);
 		}
-		set proxyMember(v: property.ProxyType) {
-			rawExpr = property.setProxyType(v, rawExpr);
+		set proxyMember(v: ProxyType) {
+			rawExpr = setProxyType(v, rawExpr);
 		}
 	}
 
@@ -64,11 +64,11 @@ function replaceProperties(classDeclaration) {
 			let init = getSource(member.initializer);
 			
 			let dummyCode = `class ${classDeclaration.name.text} {
-				@inline get ${name}() : property.${type} {
-					return property.get${type}(${init});
+				@inline get ${name}() : ${type} {
+					return get${type}(${init});
 				}
-				@inline set ${name}(v : property.${type}) {
-					${init} = property.set${type}(v, ${init});
+				@inline set ${name}(v : ${type}) {
+					${init} = set${type}(v, ${init});
 				}
 			}`;
 			let parser = new Parser();

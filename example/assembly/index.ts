@@ -4,7 +4,7 @@ import * as Clap from "as-clap"
 
 class MyPlugin extends Clap.Plugin {
 
-	constructor(host : Clap.Host) {
+	constructor(host : Clap.clap_host) {
 		super(host);
 	}
 

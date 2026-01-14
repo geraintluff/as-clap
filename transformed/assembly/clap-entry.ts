@@ -1,11 +1,11 @@
 import * as Core from "./clap-core";
 import {
   fnPtr
-} from "./common";
+} from "./clap";
 import {
   pluginFactory,
   modulePath
-} from "./clap";
+} from "./plugin-base";
 let initCounter = memory.data(4);
 function clapEntry_init(strPtr: usize): bool {
   let count: i32;

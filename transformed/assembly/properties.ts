@@ -1,9 +1,26 @@
 export const MAX_CSTRING_LENGTH = 8192;
 export const MAX_FEATURE_COUNT = 100;
+@inline
+export function getCStringN(ptr: usize, maxLength: usize): string {
+  return String.UTF8.decodeUnsafe(ptr, maxLength, true);
+}
+export function setCStringN(str: string, ptr: usize, length: i32): void {
+  let bytes = String.UTF8.byteLength(str, true);
+  while (bytes > length) {
+    let extra = bytes - length;
+    str = str.substring(0, str.length - extra);
+    bytes = String.UTF8.byteLength(str, true);
+  }
+  String.UTF8.encodeUnsafe(changetype<usize>(str), str.length, ptr, true);
+  while (bytes < length) {
+    store<u8>(ptr + bytes, 0);
+    ++bytes;
+  }
+}
 export type CString = string;
 @inline
 export function getCString(ptr: usize): string {
-  return String.UTF8.decodeUnsafe(ptr, MAX_CSTRING_LENGTH, true);
+  return getCStringN(ptr, MAX_CSTRING_LENGTH);
 }
 export function setCString(str: string, ptr: usize): usize {
   if (ptr != 0) heap.free(ptr);
@@ -35,9 +52,7 @@ export function getCString256(first: usize): string {
 }
 @inline
 export function setCString256(str: string, first: usize): usize {
-  let bytes = String.UTF8.byteLength(str, true);
-  while (bytes > 256) str = str.substring(0, str.length - 1);
-  String.UTF8.encodeUnsafe(changetype<usize>(str), str.length, first, true);
+  setCStringN(str, first, 256);
   return first;
 }
 export type Renamed<T> = T;
@@ -64,7 +79,7 @@ export function setNullablePtr<Obj>(v: Obj | null, prev: usize): usize {
 }
 @unmanaged
 @final
-export class CNumArray<T> {
+export class CNumPtr<T> {
   @inline
   @operator("[]")
   get(i: usize): T {
@@ -78,12 +93,12 @@ export class CNumArray<T> {
   }
 }
 @inline
-export function getCNumArray<T>(ptr: usize): CNumArray<T> {
-  return changetype<CNumArray<T>>(ptr);
+export function getCNumPtr<T>(ptr: usize): CNumPtr<T> {
+  return changetype<CNumPtr<T>>(ptr);
 }
 @unmanaged
 @final
-export class CObjArray<T> {
+export class CObjPtr<T> {
   @inline
   @operator("[]")
   get(i: usize): T {
@@ -91,12 +106,12 @@ export class CObjArray<T> {
   }
 }
 @inline
-export function getCObjArray<T>(ptr: usize): CObjArray<T> {
-  return changetype<CObjArray<T>>(ptr);
+export function getCObjPtr<T>(ptr: usize): CObjPtr<T> {
+  return changetype<CObjPtr<T>>(ptr);
 }
 @unmanaged
 @final
-export class CPtrArray<T> {
+export class CPtrPtr<T> {
   @inline
   @operator("[]")
   get(i: usize): T {
@@ -112,6 +127,6 @@ export class CPtrArray<T> {
   }
 }
 @inline
-export function getCPtrArray<T>(ptr: usize): CPtrArray<T> {
-  return changetype<CPtrArray<T>>(ptr);
+export function getCPtrPtr<T>(ptr: usize): CPtrPtr<T> {
+  return changetype<CPtrPtr<T>>(ptr);
 }

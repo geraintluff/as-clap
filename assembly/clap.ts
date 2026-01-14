@@ -1,16 +1,52 @@
-// The friendly API for implementing CLAP plugins
+// The friendly version of various structs
 
 import * as Core from "./clap-core";
 
-import * as property from "./property"
-import {fnPtr, equalCStr, Version, AudioBuffer, Process} from "./common";
-import {Host} from "./host";
+// type/get/set used for `@property` access
+import {CString, getCString, setCString, CStringNullable, getCStringNullable, setCStringNullable, CString256, setCString256, getCString256, Renamed, getRenamed, setRenamed, NullablePtr, getNullablePtr, setNullablePtr, CNumPtr, getCNumPtr, CObjPtr, getCObjPtr, CPtrPtr, getCPtrPtr} from "./properties"
 
-import {HostAudioPorts} from "./ext/audio-ports";
+export function fnPtr<F>(fn : F) : usize {
+	assert(load<usize>(changetype<usize>(fn) + sizeof<usize>()) == 0, "_env of function must be zero if you're taking a pointer");
+	return load<usize>(changetype<usize>(fn));
+}
 
-// Global variable filled out by `clap_entry.iniit()`
-let modulePath = "";
-export {modulePath};
+export function equalCStr(a : usize, b : usize) : bool {
+	let memEnd = usize(memory.size()*65536);
+	while (a < memEnd && b < memEnd) {
+		let ac = load<u8>(a++), bc = load<u8>(b++);
+		if (ac != bc) return false;
+		if (!ac) return true; // end of string
+	}
+	return false;
+}
+
+@unmanaged @final
+export class Version extends Core.clap_version {
+	@property readonly major: Renamed<u32> = this._major;
+	@property readonly minor: Renamed<u32> = this._minor;
+	@property readonly revision: Renamed<u32> = this._revision;
+}
+
+@unmanaged @final
+export class AudioBuffer extends Core.clap_audio_buffer {
+	@property readonly data32 : CPtrPtr<CNumPtr<f32>> = this._data32;
+	@property readonly data64 : CPtrPtr<CNumPtr<f64>> = this._data64;
+	@property readonly channelCount : Renamed<u32> = this._channel_count;
+	@property latency : Renamed<u32> = this._latency;
+	@property constantMask : Renamed<u32> = this._constant_mask;
+}
+
+@unmanaged @final
+export class Process extends Core.clap_process {
+	@property readonly steadyTime : Renamed<u32> = this._steady_time;
+	@property readonly framesCount : Renamed<u32> = this._frames_count;
+	@property readonly transport : NullablePtr<clap_event_transport> = this._transport;
+	@property readonly audioInputs : CObjPtr<AudioBuffer> = this._audio_inputs;
+	@property readonly audioOutputs : CObjPtr<AudioBuffer> = this._audio_outputs;
+	@property readonly audioInputsCount : Renamed<u32> = this._audio_inputs_count;
+	@property readonly audioOutputsCount : Renamed<u32> = this._audio_outputs_count;
+}
+assert(offsetof<Core.clap_process>() == offsetof<Process>(), "`Process` must have the exact same layout as `clap_process` (no extra fields)");
 
 @unmanaged @final
 export class PluginDescriptor extends Core.clap_plugin_descriptor {
@@ -43,145 +79,50 @@ export class PluginDescriptor extends Core.clap_plugin_descriptor {
 		this._features = featureList;
 
 		for (let i: i32 = 0; i < list.length; ++i) {
-			let rawPtr = property.setCStringNullable(list[i], 0);
+			let rawPtr = setCStringNullable(list[i], 0);
 			store<usize>(featureList + sizeof<usize>()*i, rawPtr);
 		}
 		store<usize>(featureList + sizeof<usize>()*list.length, 0); // null-terminated list
 	}
 }
 
-// Because plugins are managed, we need a way to retain them while we return raw pointers
-let activePlugins = new Map<usize, Plugin>();
-export class Plugin {
-	readonly host: Host;
-	hostAudioPorts : HostAudioPorts | null = null;
-
-	// These are unmanaged types which we own, so need to free them
-	private corePlugin: Core.clap_plugin;
-
-	constructor(host: Host) {
-		this.host = host;
-
-		// Function pointers which forward to our methods below
-		let corePlugin = this.corePlugin = new Core.clap_plugin();
-		// corePlugin._desc is set by `createFn()` below
-		corePlugin._plugin_data = changetype<usize>(this);
-		corePlugin._init = fnPtr<(ptr: Core.clap_plugin)=>bool>((ptr: Core.clap_plugin): bool => getPlugin(ptr).pluginInit());
-		corePlugin._destroy = fnPtr((ptr: Core.clap_plugin): void => {
-			getPlugin(ptr).pluginDestroy(); // releases all non-managed fields
-			// this should get us GC'd, and we do it here instead of in `.pluginDestroy()` just in case it'd get collected during the function call
-			activePlugins.delete(changetype<usize>(ptr));
-		});
-		corePlugin._activate = fnPtr((ptr: Core.clap_plugin, sampleRate: f64, minFrames: u32, maxFrames: u32): bool => getPlugin(ptr).pluginActivate(sampleRate, minFrames, maxFrames));
-		corePlugin._deactivate = fnPtr((ptr: Core.clap_plugin): void => getPlugin(ptr).pluginDeactivate());
-		corePlugin._start_processing = fnPtr((ptr: Core.clap_plugin): bool => getPlugin(ptr).pluginStartProcessing());
-		corePlugin._stop_processing = fnPtr((ptr: Core.clap_plugin): void => getPlugin(ptr).pluginStopProcessing());
-		corePlugin._reset = fnPtr((ptr: Core.clap_plugin): void => getPlugin(ptr).pluginReset());
-		corePlugin._process = fnPtr((ptr: Core.clap_plugin, process: Process): i32 => getPlugin(ptr).pluginProcess(process));
-		corePlugin._get_extension = fnPtr((corePlugin: Core.clap_plugin, extIdPtr: usize): usize => changetype<Plugin>(corePlugin._plugin_data).pluginGetExtensionUtf8(extIdPtr));
-		corePlugin._on_main_thread = fnPtr((ptr: Core.clap_plugin): void => getPlugin(ptr).pluginOnMainThread());
-	}
-
-	pluginInit(): bool {
-		console.log(`pluginInit()`)
-		let host = this.host;
-		this.hostAudioPorts = host.getExtensionUtf8<HostAudioPorts>(Core.Utf8.EXT_AUDIO_PORTS);
-		return true;
-	}
-	pluginDestroy(): void {
-		heap.free(changetype<usize>(this.corePlugin));
-	}
-	pluginActivate(sampleRate: f64, minFrames: u32, maxFrames: u32): bool {
-		return true;
-	}
-	pluginDeactivate(): void {}
-	pluginStartProcessing(): bool {
-		return true;
-	}
-	pluginStopProcessing(): void {}
-	pluginReset(): void {}
-	pluginProcess(process: Process): i32 {
-		return 0;
-	}
-	pluginGetExtensionUtf8(extIdPtr : usize) : usize {
-		if (equalCStr(extIdPtr, Core.Utf8.EXT_AUDIO_PORTS)) return changetype<usize>(coreAudioPorts);
-
-		let extId = String.UTF8.decodeUnsafe(extIdPtr, 32, true);
-		return this.pluginGetExtension(extId);
-	}
-	pluginGetExtension(extId: string): usize {
-		console.log(`as-clap: unknown extId ${extId}`);
-		return 0;
-	}
-	pluginOnMainThread(): void {
-		console.log("pluginOnMainThread()");
-	}
-
-	audioPortsCount(isInput: bool) : u32 {
-		return 0;
-	}
-	audioPortsGet(index: u32, isInput: bool, info: AudioPortInfo) : bool {
-		return false;
-	}
+@unmanaged @final
+export class AudioPortInfo extends Core.clap_audio_port_info {
+	@property id : Renamed<Core.clap_id> = this._id;
+	@property name : CString256 = this._name;
+	@property flags : Renamed<u32> = this._flags;
+	@property channelCount : Renamed<u32> = this._channel_count;
+	@property portType : CString = this._port_type;
+	@property inPlacePair : Renamed<clap_id> = this._in_place_pair;
 }
 
-@inline function getPlugin(ptr: Core.clap_plugin): Plugin {
-	return changetype<Plugin>(ptr._plugin_data);
+@unmanaged @final
+export class ParamInfo extends Core.clap_param_info {
+	@property id : Renamed<clap_id> = this._id;
+	@property flags : Renamed<u32> = this._flags;
+	@property cookie : Renamed<usize> = this._cookie;
+	@property name : CString256 = this._name;
+	@property module : CString1024 = this._module;
+	@property minValue : Renamed<f64> = this._min_value;
+	@property maxValue : Renamed<f64> = this._max_value;
+	@property defaultValue : Renamed<f64> = this._default_value;
 }
 
-let coreAudioPorts = new Core.clap_plugin_audio_ports();
-// coreAudioPorts._count = fnPtr((ptr: Core.clap_plugin, isInput: bool) : u32 => getPlugin(ptr).audioPortsCount(isInput));
-// coreAudioPorts._get = fnPtr((ptr: Core.clap_plugin, index: u32, isInput: bool, info: AudioPortInfo) : bool => getPlugin(ptr).audioPortsGet(index, isInput, info));
-
-class RegisteredClapPlugin {
-	constructor(
-		public id: string,
-		public desc : Core.clap_plugin_descriptor,
-		public create: (host: Core.clap_host, desc: Core.clap_plugin_descriptor) => Core.clap_plugin
-	) {} // just stores stuff
-}
-
-let registeredPluginList = new Array<RegisteredClapPlugin>();
-
-export function registerPlugin<PluginClass extends Plugin>(pluginName: string, pluginId: string): PluginDescriptor {
-	let desc = new PluginDescriptor(); // unmanaged, so never GC'd
-	desc.id = pluginId;
-	desc.name = pluginName;
-	desc.features = ["audio-effect"];
-
-	let createFn = function (host: Core.clap_host, desc: Core.clap_plugin_descriptor): Core.clap_plugin {
-		let plugin = instantiate<PluginClass>(changetype<Host>(host));
-		let corePlugin = plugin.corePlugin;
-		activePlugins.set(changetype<usize>(corePlugin), plugin);
-
-		corePlugin._desc = changetype<usize>(desc);
-		return corePlugin;
-	};
-	registeredPluginList.push(new RegisteredClapPlugin(pluginId, desc, createFn));
-
-	return desc; // return the friendly interface so it can be filled out
-}
-
-//---- CLAP plugin factory API ----//
-function pluginFactory_get_plugin_count(self: Core.clap_plugin_factory): usize {
-	return registeredPluginList.length;
-}
-function pluginFactory_get_plugin_descriptor(self: Core.clap_plugin_factory, index: u32): usize {
-	if (index >= u32(registeredPluginList.length)) return 0;
-	return changetype<usize>(registeredPluginList[index].desc);
-}
-function pluginFactory_create_plugin(self: Core.clap_plugin_factory, host: Core.clap_host, strPtr: usize): usize {
-	let pluginId = String.UTF8.decodeUnsafe(strPtr, 8192, true);
-	for (let i = 0; i < registeredPluginList.length; ++i) {
-		let registered = registeredPluginList[i];
-		if (registered.id == pluginId) {
-			let corePlugin = registered.create(host, registered.desc);
-			return changetype<usize>(corePlugin);
-		}
+@unmanaged @final
+export class InputEvents extends Core.clap_input_events {
+	@inline get size() : u32 {
+		return call_indirect<u32>(u32(this._size), this);
 	}
-	return 0;
+	@inline @operator("[]") get(index: usize) : Core.clap_event_header {
+		let index32 = u32(index);
+		let size = call_indirect<u32>(u32(this._size), this);
+		if (index32 >= size) unreachable();
+		return call_indirect<Core.clap_event_header>(u32(this._get), this, index32);
+	}
 }
-export let pluginFactory = new Core.clap_plugin_factory();
-pluginFactory._get_plugin_count = fnPtr(pluginFactory_get_plugin_count);
-pluginFactory._get_plugin_descriptor = fnPtr(pluginFactory_get_plugin_descriptor);
-pluginFactory._create_plugin = fnPtr(pluginFactory_create_plugin);
+@unmanaged @final
+export class OutputEvents extends Core.clap_output_events {
+	@inline tryPush(event: Core.clap_event_header) : bool {
+		return call_indirect<bool>(u32(this._try_push), this, event);
+	}
+}
