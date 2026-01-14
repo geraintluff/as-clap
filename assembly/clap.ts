@@ -93,12 +93,12 @@ export class AudioPortInfo extends Core.clap_audio_port_info {
 	@property flags : Renamed<u32> = this._flags;
 	@property channelCount : Renamed<u32> = this._channel_count;
 	@property portType : CString = this._port_type;
-	@property inPlacePair : Renamed<clap_id> = this._in_place_pair;
+	@property inPlacePair : Renamed<Core.clap_id> = this._in_place_pair;
 }
 
 @unmanaged @final
 export class ParamInfo extends Core.clap_param_info {
-	@property id : Renamed<clap_id> = this._id;
+	@property id : Renamed<Core.clap_id> = this._id;
 	@property flags : Renamed<u32> = this._flags;
 	@property cookie : Renamed<usize> = this._cookie;
 	@property name : CString256 = this._name;
@@ -110,7 +110,7 @@ export class ParamInfo extends Core.clap_param_info {
 
 @unmanaged @final
 export class InputEvents extends Core.clap_input_events {
-	@inline get size() : u32 {
+	@inline size() : u32 {
 		return call_indirect<u32>(u32(this._size), this);
 	}
 	@inline @operator("[]") get(index: usize) : Core.clap_event_header {

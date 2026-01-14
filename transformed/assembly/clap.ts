@@ -255,24 +255,24 @@ export class AudioPortInfo extends Core.clap_audio_port_info {
     this._port_type = setCString(v, this._port_type);
   }
   @inline
-  get inPlacePair(): Renamed<clap_id> {
-    return getRenamed<clap_id>(this._in_place_pair);
+  get inPlacePair(): Renamed<Core.clap_id> {
+    return getRenamed<Core.clap_id>(this._in_place_pair);
   }
   @inline
-  set inPlacePair(v: Renamed<clap_id>) {
-    this._in_place_pair = setRenamed<clap_id>(v, this._in_place_pair);
+  set inPlacePair(v: Renamed<Core.clap_id>) {
+    this._in_place_pair = setRenamed<Core.clap_id>(v, this._in_place_pair);
   }
 }
 @unmanaged
 @final
 export class ParamInfo extends Core.clap_param_info {
   @inline
-  get id(): Renamed<clap_id> {
-    return getRenamed<clap_id>(this._id);
+  get id(): Renamed<Core.clap_id> {
+    return getRenamed<Core.clap_id>(this._id);
   }
   @inline
-  set id(v: Renamed<clap_id>) {
-    this._id = setRenamed<clap_id>(v, this._id);
+  set id(v: Renamed<Core.clap_id>) {
+    this._id = setRenamed<Core.clap_id>(v, this._id);
   }
   @inline
   get flags(): Renamed<u32> {
@@ -335,7 +335,7 @@ export class ParamInfo extends Core.clap_param_info {
 @final
 export class InputEvents extends Core.clap_input_events {
   @inline
-  get size(): u32 {
+  size(): u32 {
     return call_indirect<u32>(u32(this._size), this);
   }
   @inline
