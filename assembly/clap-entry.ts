@@ -1,5 +1,5 @@
-import {fnPtr} from "./type-helpers"
 import * as Core from "./clap-core"
+import {fnPtr} from "./common"
 import {pluginFactory, modulePath} from "./clap"
 
 //---- CLAP entry ----//

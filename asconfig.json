@@ -1,7 +1,7 @@
 {
 	"extends": "./node_modules/@assemblyscript/wasi-shim/asconfig.json",
 	"entries": [
-		"./assembly/index.ts",
+		"./assembly/clap-entry.ts",
 		"./example/assembly/index.ts"
 	],
 	"targets": {
@@ -12,6 +12,7 @@
 		},
 		"release": {
 			"outFile": "./build/release.wasm",
+			"textFile": "./build/release.wat",
 			"sourceMap": true,
 			"optimizeLevel": 3,
 			"shrinkLevel": 0,

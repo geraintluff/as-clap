@@ -1,1 +1,1 @@
-export * from "./transformed/assembly/clap"
+export * from "./transformed/assembly"

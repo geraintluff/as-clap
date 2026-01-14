@@ -7,7 +7,7 @@
   "author": "Geraint <geraint@signalsmith-audio.co.uk>",
   "license": "BSL",
   "scripts": {
-    "asbuild": "asc --target release"
+    "asbuild": "rm -r transformed/assembly && cp -r assembly transformed/ && asc --target release"
   },
   "devDependencies": {
     "@assemblyscript/wasi-shim": "^0.1.0",

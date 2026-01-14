@@ -46,10 +46,10 @@ let structFields = {};
 let structCount = 0;
 let fieldCount = 0;
 let typedefCount = 0;
-let constantCount = 0;
+let numConstantCount = 0;
 
 function addConstant(name, value, comment) {
-	++constantCount;
+	++numConstantCount;
 	comment = (comment ? ' // ' + comment : '');
 	asCode += `export const ${name} = ${value.trim()};${comment}\n`;
 }
@@ -238,4 +238,4 @@ asCode += `
 
 fs.writeFileSync("../assembly/clap-core.ts", asCode);
 
-console.log(`translated ${structCount} structs (with ${fieldCount} fields), ${typedefCount} typedefs and ${constantCount} constants`);
+console.log(`translated ${structCount} structs (with ${fieldCount} fields), ${typedefCount} typedefs, ${numConstantCount} numeric constants and ${stringConstants.length} strings`);

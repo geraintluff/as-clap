@@ -1,8 +1,5 @@
 export const MAX_CSTRING_LENGTH = 8192;
 export const MAX_FEATURE_COUNT = 100;
-export function fnPtr<F>(fn: F): usize {
-  return load<usize>(changetype<usize>(fn));
-}
 export type CString = string;
 @inline
 export function getCString(ptr: usize): string {

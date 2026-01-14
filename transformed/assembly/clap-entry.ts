@@ -1,7 +1,7 @@
+import * as Core from "./clap-core";
 import {
   fnPtr
-} from "./type-helpers";
-import * as Core from "./clap-core";
+} from "./common";
 import {
   pluginFactory,
   modulePath

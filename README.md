@@ -109,7 +109,7 @@ export class clap_audio_port_info {
 }
 ```
 
-Any pointers or functions are mapped to `usize`.  We can re-interpret (`changetype`) the raw pointers as a more useful types (e.g. another of the `clap_...` classes) to access their fields.
+Any pointers or functions are mapped to `usize`.  We can re-interpret (`changetype`) the raw pointers as a more useful types (e.g. another of the `clap_...` classes) to access their fields.  We have all the CLAP constants available, with strings as both `string` and `usize` (for UTF8 C-style strings)
 
 ### `Plugin` base class
 
@@ -126,7 +126,7 @@ The `Plugin` class retains itself while active (so it's not GC'd until destroyed
 
 ### Friendly classes
 
-Aside from the `Plugin` class (and re-exporting all the `clap_...` core API stuff), `assembly/clap.ts` also provides enhanced versions of the core classes.  These don't actually add any fields, so you can cast core-API objects to these enhanced versions.
+Aside from the `Plugin` class (and re-exporting all the `clap_...` core API stuff), `assembly/clap.ts` also provides enhanced versions of the core classes.  These extend from the core classes and don't actually add any fields, so you can cast core-API objects to these enhanced versions.
 
 ```typescript
 @unmanaged @final
@@ -139,6 +139,10 @@ export class AudioPortInfo extends Core.clap_audio_port_info {
 	@property inPlacePair : Renamed<clap_id> = this._in_place_pair;
 }
 ```
+
+The types used for `@property`s are defined in `assembly/property.ts`, but in short: any string-like field gets translated to/from `string`.
+
+If you're using one of the CLAP string constants, it will use less binary space to assign the UTF8 version (e.g. `info._port_type = Clap.Utf8.PORT_STEREO` rather than `info.portType = Clap.Strings.PORT_STEREO`).  However, don't mix-and-match, otherwise the helper will attempt to free the UTF8 constant. 
 
 ### Transform
 
