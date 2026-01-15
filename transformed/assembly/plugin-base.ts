@@ -25,6 +25,7 @@ export class Plugin {
   _plugin: Core.clap_plugin;
   _host: Core.clap_host;
   _host_audio_ports: Core.clap_host_audio_ports | null;
+  _host_note_ports: Core.clap_host_note_ports | null;
   _host_params: Core.clap_host_params | null;
   constructor(host: Core.clap_host) {
     this._host = host;
@@ -102,6 +103,8 @@ export class Plugin {
   pluginGetExtensionUtf8(extIdPtr: usize): usize {
     if (equalCStr(extIdPtr, Core.Utf8.EXT_AUDIO_PORTS)) return changetype<usize>(coreAudioPorts);
 ;
+    if (equalCStr(extIdPtr, Core.Utf8.EXT_NOTE_PORTS)) return changetype<usize>(coreNotePorts);
+;
     if (equalCStr(extIdPtr, Core.Utf8.EXT_PARAMS)) return changetype<usize>(coreParams);
 ;
     let extId = String.UTF8.decodeUnsafe(extIdPtr, 32, true);
@@ -130,6 +133,23 @@ export class Plugin {
   protected hostAudioPortsRescan(flags: u32): void {
     assert(this._host_audio_ports);
     return call_indirect<void>(u32(this._host_audio_ports._rescan), this._host, flags);
+  }
+  notePortsCount(isInput: bool): u32 {
+    return 0;
+  }
+  notePortsGet(index: u32, isInput: bool, info: Clap.NotePortInfo): bool {
+    return false;
+  }
+  protected get hostNotePorts(): bool {
+    return this._host_note_ports != null;
+  }
+  protected hostNotePortsSupportedDialects(): u32 {
+    assert(this._host_note_ports);
+    return call_indirect<u32>(u32(this._host_note_ports._supported_dialects), this._host);
+  }
+  protected hostNotePortsRescan(flags: u32): void {
+    assert(this._host_note_ports);
+    return call_indirect<void>(u32(this._host_note_ports._rescan), this._host, flags);
   }
   paramsCount(): u32 {
     return 0;
@@ -166,8 +186,11 @@ function getPlugin(ptr: Core.clap_plugin): Plugin {
   return changetype<Plugin>(ptr._plugin_data);
 }
 let coreAudioPorts = new Core.clap_plugin_audio_ports();
-coreAudioPorts._get = fnPtr((ptr: Core.clap_plugin, index: u32, isInput: bool, info: Clap.AudioPortInfo): bool => getPlugin(ptr).audioPortsGet(index, isInput, info));
 coreAudioPorts._count = fnPtr((ptr: Core.clap_plugin, isInput: bool): u32 => getPlugin(ptr).audioPortsCount(isInput));
+coreAudioPorts._get = fnPtr((ptr: Core.clap_plugin, index: u32, isInput: bool, info: Clap.AudioPortInfo): bool => getPlugin(ptr).audioPortsGet(index, isInput, info));
+let coreNotePorts = new Core.clap_plugin_note_ports();
+coreNotePorts._count = fnPtr((ptr: Core.clap_plugin, isInput: bool): u32 => getPlugin(ptr).notePortsCount(isInput));
+coreNotePorts._get = fnPtr((ptr: Core.clap_plugin, index: u32, isInput: bool, info: Clap.NotePortInfo): bool => getPlugin(ptr).notePortsGet(index, isInput, info));
 let coreParams = new Core.clap_plugin_params();
 coreParams._count = fnPtr((ptr: Core.clap_plugin): u32 => getPlugin(ptr).paramsCount());
 coreParams._get_info = fnPtr((ptr: Core.clap_plugin, index: u32, info: Clap.ParamInfo): bool => getPlugin(ptr).paramsGetInfo(index, info));

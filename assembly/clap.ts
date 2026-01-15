@@ -45,6 +45,12 @@ export class Process extends Core.clap_process {
 	@property readonly audioOutputs : CObjPtr<AudioBuffer> = this._audio_outputs;
 	@property readonly audioInputsCount : Renamed<u32> = this._audio_inputs_count;
 	@property readonly audioOutputsCount : Renamed<u32> = this._audio_outputs_count;
+	get inEvents() : InputEvents {
+		return changetype<InputEvents>(this._in_events);
+	}
+	get outEvents() : OutputEvents {
+		return changetype<OutputEvents>(this._out_events);
+	}
 }
 assert(offsetof<Core.clap_process>() == offsetof<Process>(), "`Process` must have the exact same layout as `clap_process` (no extra fields)");
 
@@ -94,6 +100,14 @@ export class AudioPortInfo extends Core.clap_audio_port_info {
 	@property channelCount : Renamed<u32> = this._channel_count;
 	@property portType : CString = this._port_type;
 	@property inPlacePair : Renamed<Core.clap_id> = this._in_place_pair;
+}
+
+@unmanaged @final
+export class NotePortInfo extends Core.clap_note_port_info {
+	@property id : Renamed<Core.clap_id> = this._id;
+	@property supportedDialects : Renamed<u32> = this._supported_dialects;
+	@property preferredDialect : Renamed<u32> = this._preferred_dialect;
+	@property name : CString256 = this._name;
 }
 
 @unmanaged @final

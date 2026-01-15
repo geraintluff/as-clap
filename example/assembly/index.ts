@@ -28,6 +28,9 @@ class MyPlugin extends Clap.Plugin {
 		let audioOut = process.audioOutputs[0];
 		let length = process.framesCount;
 
+		// process events in the most basic way
+		this.paramsFlush(process.inEvents, process.outEvents);
+
 		let gain = this.gainParamValueSmoothed;
 		let gainStart = gain;
 		let gainTarget = this.gainParamValue;

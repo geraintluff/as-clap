@@ -116,6 +116,12 @@ export class Process extends Core.clap_process {
   get audioOutputsCount(): Renamed<u32> {
     return getRenamed<u32>(this._audio_outputs_count);
   }
+  get inEvents(): InputEvents {
+    return changetype<InputEvents>(this._in_events);
+  }
+  get outEvents(): OutputEvents {
+    return changetype<OutputEvents>(this._out_events);
+  }
 }
 assert(offsetof<Core.clap_process>() == offsetof<Process>(), "`Process` must have the exact same layout as `clap_process` (no extra fields)");
 @unmanaged
@@ -261,6 +267,42 @@ export class AudioPortInfo extends Core.clap_audio_port_info {
   @inline
   set inPlacePair(v: Renamed<Core.clap_id>) {
     this._in_place_pair = setRenamed<Core.clap_id>(v, this._in_place_pair);
+  }
+}
+@unmanaged
+@final
+export class NotePortInfo extends Core.clap_note_port_info {
+  @inline
+  get id(): Renamed<Core.clap_id> {
+    return getRenamed<Core.clap_id>(this._id);
+  }
+  @inline
+  set id(v: Renamed<Core.clap_id>) {
+    this._id = setRenamed<Core.clap_id>(v, this._id);
+  }
+  @inline
+  get supportedDialects(): Renamed<u32> {
+    return getRenamed<u32>(this._supported_dialects);
+  }
+  @inline
+  set supportedDialects(v: Renamed<u32>) {
+    this._supported_dialects = setRenamed<u32>(v, this._supported_dialects);
+  }
+  @inline
+  get preferredDialect(): Renamed<u32> {
+    return getRenamed<u32>(this._preferred_dialect);
+  }
+  @inline
+  set preferredDialect(v: Renamed<u32>) {
+    this._preferred_dialect = setRenamed<u32>(v, this._preferred_dialect);
+  }
+  @inline
+  get name(): CString256 {
+    return getCString256(this._name);
+  }
+  @inline
+  set name(v: CString256) {
+    this._name = setCString256(v, this._name);
   }
 }
 @unmanaged
