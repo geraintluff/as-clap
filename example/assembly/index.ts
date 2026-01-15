@@ -7,6 +7,9 @@ class MyPlugin extends Clap.Plugin {
 
 	sampleRate: f32 = 1;
 
+	gainParamValue: f32 = 1;
+	gainParamValueSmoothed: f32 = 1;
+
 	constructor(host : Clap.clap_host) {
 		super(host);
 	}
@@ -16,12 +19,10 @@ class MyPlugin extends Clap.Plugin {
 		console.log(`Plugin initialised!  Module path is ${Clap.modulePath}`);
 		return true;
 	}
-
 	pluginActivate(sampleRate: f64, minFrames: u32, maxFrames: u32) : bool {
 		this.sampleRate = f32(sampleRate);
 		return true;
 	}
-
 	pluginProcess(process : Clap.Process) : i32 {
 		let audioIn = process.audioInputs[0];
 		let audioOut = process.audioOutputs[0];
@@ -58,9 +59,6 @@ class MyPlugin extends Clap.Plugin {
 		return true;
 	}
 
-	gainParamValue: f32 = 1;
-	gainParamValueSmoothed: f32 = 1;
-
 	paramsCount() : u32 {
 		return 1;
 	}
@@ -80,7 +78,10 @@ class MyPlugin extends Clap.Plugin {
 	}
 	paramsValueToText(id: Clap.clap_id, value: f64) : string | null {
 		if (id != 0x1234) return null;
-		return `${value}`;
+		if (value < 1e-6) return "off";
+		let db = 20*Math.log10(value);
+		db = Math.round(db*10)/10;
+		return `${db} dB`;
 	}
 	paramsFlush(inputEvents: Clap.InputEvents, outputEvents: Clap.OutputEvents) : void{
 		let count = inputEvents.size();
@@ -106,5 +107,5 @@ class MyPlugin extends Clap.Plugin {
 	}
 }
 
-let pluginSpec = Clap.registerPlugin<MyPlugin>("The Pluginator", "com.example.clap.my-plugin");
-pluginSpec.vendor = "Really Cool Plugins Ltd.";
+let pluginSpec = Clap.registerPlugin<MyPlugin>("AssemblyScript Gain", "com.example.clap.my-plugin");
+pluginSpec.vendor = "Example Dot Com";
