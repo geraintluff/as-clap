@@ -14,7 +14,7 @@
 			"outFile": "./build/release.wasm",
 			"sourceMap": true,
 			"optimizeLevel": 3,
-			"shrinkLevel": 0,
+			"shrinkLevel": 1,
 			"converge": false,
 			"noAssert": false
 		}
