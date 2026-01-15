@@ -74,7 +74,7 @@ class MyPlugin extends Clap.Plugin {
 		info.defaultValue = 1;
 		return true;
 	}
-	paramsGetValue(id: Clap.clap_id, value: CNumPtr<f64>) : bool{
+	paramsGetValue(id: Clap.clap_id, value: CNumPtr<f64>) : bool {
 		if (id != 0x1234) return false;
 		value[0] = this.gainParamValue;
 		return true;
@@ -86,7 +86,7 @@ class MyPlugin extends Clap.Plugin {
 		db = Math.round(db*10)/10;
 		return `${db} dB`;
 	}
-	paramsFlush(inputEvents: Clap.InputEvents, outputEvents: Clap.OutputEvents) : void{
+	paramsFlush(inputEvents: Clap.InputEvents, outputEvents: Clap.OutputEvents) : void {
 		let count = inputEvents.size();
 		for (let i: u32 = 0; i < count; ++i) {
 			let event = inputEvents.get(i);
@@ -96,12 +96,27 @@ class MyPlugin extends Clap.Plugin {
 		}
 	}
 
+	stateSave(ostream: Clap.OStream) : bool {
+		let buffer = new ArrayBuffer(4);
+		store<f32>(changetype<usize>(buffer), this.gainParamValue);
+		let wrote = ostream.write(changetype<usize>(buffer), 4);
+		return (wrote == 4);
+	}
+	stateLoad(istream: Clap.IStream) : bool {
+		let buffer = new ArrayBuffer(4);
+		let read = istream.read(changetype<usize>(buffer), 4);
+		if (read != 4) return false;
+		this.gainParamValue = load<f32>(changetype<usize>(buffer));
+		return true;
+	}
+
 	handleEvent(event: Clap.clap_event_header) : bool {
 		if (event._space_id != Clap.CORE_EVENT_SPACE_ID) return false;
 		if (event._type == Clap.EVENT_PARAM_VALUE) {
 			let valueEvent = changetype<Clap.clap_event_param_value>(event);
 			if (valueEvent._param_id != 0x1234) return false; // unknown ID
 			this.gainParamValue = f32(valueEvent._value);
+			if (this.hostState) this.hostStateMarkDirty();
 			return true;
 		} else {
 			console.log(`unknown event._type = ${event._type}`);

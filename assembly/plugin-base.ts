@@ -25,6 +25,7 @@ export class Plugin {
 	_host_audio_ports : Core.clap_host_audio_ports | null;
 	_host_note_ports : Core.clap_host_note_ports | null;
 	_host_params : Core.clap_host_params | null;
+	_host_state : Core.clap_host_state | null;
 
 	constructor(host: Core.clap_host) {
 		this._host = host;
@@ -90,7 +91,9 @@ export class Plugin {
 	pluginInit(): bool {
 		console.log(`pluginInit()`)
 		this._host_audio_ports = this.hostGetExtensionUtf8<Core.clap_host_audio_ports>(Core.Utf8.EXT_AUDIO_PORTS);
+		this._host_note_ports = this.hostGetExtensionUtf8<Core.clap_host_note_ports>(Core.Utf8.EXT_NOTE_PORTS);
 		this._host_params = this.hostGetExtensionUtf8<Core.clap_host_params>(Core.Utf8.EXT_PARAMS);
+		this._host_state = this.hostGetExtensionUtf8<Core.clap_host_state>(Core.Utf8.EXT_STATE);
 		return true;
 	}
 	pluginDestroy(): void {
@@ -112,6 +115,7 @@ export class Plugin {
 		if (equalCStr(extIdPtr, Core.Utf8.EXT_AUDIO_PORTS)) return changetype<usize>(coreAudioPorts);
 		if (equalCStr(extIdPtr, Core.Utf8.EXT_NOTE_PORTS)) return changetype<usize>(coreNotePorts);
 		if (equalCStr(extIdPtr, Core.Utf8.EXT_PARAMS)) return changetype<usize>(coreParams);
+		if (equalCStr(extIdPtr, Core.Utf8.EXT_STATE)) return changetype<usize>(coreState);
 
 		let extId = String.UTF8.decodeUnsafe(extIdPtr, 32, true);
 		return this.pluginGetExtension(extId);
@@ -194,6 +198,22 @@ export class Plugin {
 	protected get hostParams() : bool {
 		return this._host_params != null;
 	}
+
+	//---- clap.state ----//
+
+	stateSave(ostream: Clap.OStream) : bool {
+		return false;
+	}
+	stateLoad(istream: Clap.IStream) : bool {
+		return false;
+	}
+	protected get hostState() : bool {
+		return this._host_state != null;
+	}
+	protected hostStateMarkDirty() : void {
+		assert(this._host_state);
+		call_indirect<void>(u32((this._host_state as Core.clap_host_state)._mark_dirty), this._host);
+	}
 }
 
 @inline function getPlugin(ptr: Core.clap_plugin): Plugin {
@@ -213,6 +233,9 @@ coreParams._get_value = fnPtr((ptr: Core.clap_plugin, paramId: Core.clap_id, val
 coreParams._value_to_text = fnPtr((ptr: Core.clap_plugin, paramId: Core.clap_id, value: f64, outBuffer: usize, outCapacity: u32) : bool => getPlugin(ptr).paramsValueToTextUtf8(paramId, value, outBuffer, outCapacity));
 coreParams._text_to_value = fnPtr((ptr: Core.clap_plugin, paramId: Core.clap_id, cStr: usize, value: CNumPtr<f64>) : bool => getPlugin(ptr).paramsTextToValueUtf8(paramId, cStr, value));
 coreParams._flush = fnPtr((ptr: Core.clap_plugin, inEvents: Clap.InputEvents, outEvents: Clap.OutputEvents) : void => getPlugin(ptr).paramsFlush(inEvents, outEvents));
+let coreState = new Core.clap_plugin_state();
+coreState._save = fnPtr((ptr: Core.clap_plugin, ostream: Clap.OStream) : bool => getPlugin(ptr).stateSave(ostream));
+coreState._load = fnPtr((ptr: Core.clap_plugin, istream: Clap.IStream) : bool => getPlugin(ptr).stateLoad(istream));
 
 class RegisteredClapPlugin {
 	constructor(

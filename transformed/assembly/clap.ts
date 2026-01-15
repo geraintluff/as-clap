@@ -398,3 +398,20 @@ export class OutputEvents extends Core.clap_output_events {
     return call_indirect<bool>(u32(this._try_push), this, event);
   }
 }
+@unmanaged
+@final
+export class IStream extends Core.clap_istream {
+  @inline
+  read(bufferPtr: usize, bufferSize: u64): i64 {
+    console.log(`bufferPtr = ${bufferPtr}`);
+    return call_indirect<i64>(u32(this._read), this, bufferPtr, bufferSize);
+  }
+}
+@unmanaged
+@final
+export class OStream extends Core.clap_ostream {
+  @inline
+  write(bufferPtr: usize, bufferSize: u64): i64 {
+    return call_indirect<i64>(u32(this._write), this, bufferPtr, bufferSize);
+  }
+}
